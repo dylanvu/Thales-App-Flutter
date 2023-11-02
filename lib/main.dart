@@ -1,6 +1,7 @@
 import 'package:ecg_app/device_search.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'components/custom_icon_with_button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
           background: const Color.fromARGB(255, 32, 32, 32),
         ), // Color Scheme
       ),
-      home: const MyHomePage(title: 'Thales Wellness App Home Page', pairResult: false),
+      home: const MyHomePage(
+          title: 'Thales Wellness App Home Page', pairResult: false),
     );
   }
 }
@@ -53,48 +55,23 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'ECG READING',
-              style: TextStyle(fontSize: 30, color: Colors.white),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 240, 198, 198),
-                borderRadius: BorderRadius.circular(2),
-                shape: BoxShape.rectangle,
-              ),
-              width: 350,
-              height: 150,
-              child: Center(
-                child: Text(
-                  devicePairingResult,
-                  style: const TextStyle(fontSize: 30, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            const SizedBox(height: 90),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Transform.scale(
-                  scale: 1.5,
-                  child: Switch(
-                    activeColor: Theme.of(context).colorScheme.primary,
-                    inactiveTrackColor: Colors.grey,
-                    splashRadius: 20,
-                    value: switchPressed,
-                    onChanged: (bool value) {
-                      setState(() {
-                        switchPressed = value;
-                      });
-                    },
-                  ),
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomIconWithButton(
+                  icon: FontAwesomeIcons.heartPulse,
+                  color: Colors.red,
+                  text: "Heart Rate Monitor",
                 ),
-                const Text(
-                  '  Record ECG Data',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                CustomIconWithButton(
+                  icon: Icons.water_drop,
+                  color: Colors.blue,
+                  text: "Hydration Sensor",
+                ),
+                CustomIconWithButton(
+                  icon: Icons.thermostat,
+                  color: Colors.green,
+                  text: "Body Temp Monitor",
                 ),
               ],
             ),
@@ -115,11 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             const SizedBox(height: 20),
-            Icon(
-              FontAwesomeIcons.heartPulse,
-              size: 50,
-              color: Theme.of(context).colorScheme.primary,
-            ),
           ],
         ),
       ),

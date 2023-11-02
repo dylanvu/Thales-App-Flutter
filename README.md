@@ -1,6 +1,6 @@
-# ECG_APP
+# Thales App - Flutter
 
-This is a new Flutter project!!!!!
+This is a new Flutter project!
 
 ## Getting Started
 
