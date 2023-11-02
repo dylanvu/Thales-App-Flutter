@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -68,6 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     ElevatedButton(
                         onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                        ),
                         child: const Text("Heart Rate Monitor")),
                   ],
                 ),
@@ -81,6 +84,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     ElevatedButton(
                         onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                        ),
                         child: const Text("Hydration Sensor")),
                   ],
                 ),
@@ -94,7 +100,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     ElevatedButton(
                         onPressed: () {},
-                        child: const Text("Body Temperature Monitor")),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                        ),
+                        child: const Text("Body Temp Monitor")),
                   ],
                 ),
               ],
@@ -116,11 +125,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             const SizedBox(height: 20),
-            Icon(
-              FontAwesomeIcons.heartPulse,
-              size: 50,
-              color: Theme.of(context).colorScheme.primary,
-            ),
           ],
         ),
       ),
