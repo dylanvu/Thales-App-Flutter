@@ -56,7 +56,7 @@ class _DataPageState extends State<DataPage> {
                     majorGridLines: MajorGridLines(color: Colors.white),
                     labelStyle: TextStyle(color: Colors.white, fontSize: 15),
                   ),
-                  title: ChartTitle(text: 'Heart Rate Data', textStyle: TextStyle(fontSize: 20, color: Colors.white)),
+                  title: ChartTitle(text: widget.title, textStyle: TextStyle(fontSize: 20, color: Colors.white)),
                   series: <LineSeries<HeartRateData, String>>[
                     LineSeries<HeartRateData, String>(
                     // Bind data source
