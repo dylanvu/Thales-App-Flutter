@@ -1,7 +1,7 @@
 import 'package:ecg_app/device_search.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'components/icon_button.dart';
+import 'components/custom_icon_with_button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,53 +58,20 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      FontAwesomeIcons.heartPulse,
-                      size: 100,
-                      color: Colors.red,
-                    ),
-                    ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                        ),
-                        child: const Text("Heart Rate Monitor")),
-                  ],
+                CustomIconWithButton(
+                  icon: FontAwesomeIcons.heartPulse,
+                  color: Colors.red,
+                  text: "Heart Rate Monitor",
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.water_drop,
-                      size: 100,
-                      color: Colors.blue,
-                    ),
-                    ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                        ),
-                        child: const Text("Hydration Sensor")),
-                  ],
+                CustomIconWithButton(
+                  icon: Icons.water_drop,
+                  color: Colors.blue,
+                  text: "Hydration Sensor",
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.thermostat,
-                      size: 100,
-                      color: Colors.green,
-                    ),
-                    ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                        ),
-                        child: const Text("Body Temp Monitor")),
-                  ],
+                CustomIconWithButton(
+                  icon: Icons.thermostat,
+                  color: Colors.green,
+                  text: "Body Temp Monitor",
                 ),
               ],
             ),
