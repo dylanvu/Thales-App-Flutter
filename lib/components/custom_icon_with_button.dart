@@ -19,6 +19,9 @@ class CustomIconWithButton extends StatelessWidget {
           size: 100,
           color: color,
         ),
+        const SizedBox(
+          height: 30,
+        ),
         ElevatedButton(
           onPressed: () {
             print('Going to ${text} page!');
