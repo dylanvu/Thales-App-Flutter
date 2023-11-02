@@ -2,19 +2,24 @@
 
 import 'package:flutter/material.dart';
 import 'device_search_result.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
-class DevicePairingPage extends StatefulWidget {
-  const DevicePairingPage({Key? key, required this.title}) : super(key: key);
+class DataPage extends StatefulWidget {
+  const DataPage({Key? key, required this.icon, required this.color, required this.title}) : super(key: key);
 
   final String title;
+  final Color color;
+  final Icon icon;
 
   @override
-  State<DevicePairingPage> createState() => _DevicePairingPageState();
+  State<DataPage> createState() => _DataPageState();
 }
 
-class _DevicePairingPageState extends State<DevicePairingPage> {
+class _DataPageState extends State<DataPage> {
   @override
   Widget build(BuildContext context) {
+    String dataTitle = widget.title;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -25,59 +30,69 @@ class _DevicePairingPageState extends State<DevicePairingPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Padding(
-              padding: EdgeInsets.all(25),
+              padding: EdgeInsets.all(10),
               child: Text(
-                "Looking for Devices...",
+                'dataTitle',
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 50,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-            // create custom loader icon
-            const Stack(
-              alignment: Alignment.center,
+            const SizedBox(height: 50),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                    width: 150,
-                    height: 150,
-                    child: CircularProgressIndicator(
-                      value: null,
-                      color: Colors.blue,
-                    )),
+                SfCartesianChart(
+                  plotAreaBorderColor: Colors.white,
+                  plotAreaBorderWidth: 5,
+                  
+                  primaryXAxis: CategoryAxis(
+                    axisLine: AxisLine(color: Colors.white, width: 3),
+                    majorGridLines: MajorGridLines(color: Colors.white),
+                    labelStyle: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                  primaryYAxis: NumericAxis(
+                    axisLine: AxisLine(color: Colors.white, width: 3),
+                    majorGridLines: MajorGridLines(color: Colors.white),
+                    labelStyle: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                  title: ChartTitle(text: 'Heart Rate Data', textStyle: TextStyle(fontSize: 20, color: Colors.white)),
+                  series: <LineSeries<HeartRateData, String>>[
+                    LineSeries<HeartRateData, String>(
+                    // Bind data source
+                      dataSource:  <HeartRateData>[
+                        HeartRateData('0 min', 62),
+                        HeartRateData('5 min', 65),
+                        HeartRateData('10 min', 67),
+                        HeartRateData('15 min', 66),
+                        HeartRateData('20 min', 68)
+                      ],
+                      xValueMapper: (HeartRateData person, _) => person.time,
+                      yValueMapper: (HeartRateData person, _) => person.rate,
+                      dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: TextStyle(fontSize: 15, color: Colors.white)),
+                    )
+                  ]
+                ),
+                const SizedBox(width: 300),
                 Icon(
-                  Icons.bluetooth_searching,
-                  size: 100,
-                  color: Colors.blue,
+                  FontAwesomeIcons.heartPulse,
+                  size: 250,
+                  color: widget.color,
                 ),
               ],
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => DevicePairingResultPage(
-                        title: widget.title, result: true),
-                  ),
-                );
-              },
-              child: const Text("DEBUG: Go to success page"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => DevicePairingResultPage(
-                        title: widget.title, result: false),
-                  ),
-                );
-              },
-              child: const Text("DEBUG: Go to failure page"),
-            ),
+            
           ],
         ),
       ),
     );
   }
+}
+
+class HeartRateData{
+    HeartRateData(this.time, this.rate);
+    final String time;
+    final double rate;
 }
