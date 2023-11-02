@@ -1,7 +1,6 @@
 /* Page to show while looking for device */
 
 import 'package:flutter/material.dart';
-import 'device_search_result.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -10,7 +9,7 @@ class DataPage extends StatefulWidget {
 
   final String title;
   final Color color;
-  final Icon icon;
+  final IconData icon;
 
   @override
   State<DataPage> createState() => _DataPageState();
@@ -19,7 +18,6 @@ class DataPage extends StatefulWidget {
 class _DataPageState extends State<DataPage> {
   @override
   Widget build(BuildContext context) {
-    String dataTitle = widget.title;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -29,10 +27,10 @@ class _DataPageState extends State<DataPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(10),
               child: Text(
-                'dataTitle',
+                widget.title,
                 style: TextStyle(
                   fontSize: 50,
                   color: Colors.white,
@@ -77,7 +75,7 @@ class _DataPageState extends State<DataPage> {
                 ),
                 const SizedBox(width: 300),
                 Icon(
-                  FontAwesomeIcons.heartPulse,
+                  widget.icon,
                   size: 250,
                   color: widget.color,
                 ),

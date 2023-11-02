@@ -23,17 +23,16 @@ class MyApp extends StatelessWidget {
         ), // Color Scheme
       ),
       home: const MyHomePage(
-          title: 'Thales Wellness App Home Page', pairResult: false),
+          title: 'Thales Wellness App Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title, required this.pairResult})
+  const MyHomePage({Key? key, required this.title})
       : super(key: key);
 
   final String title;
-  final bool pairResult;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -44,8 +43,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    String devicePairingResult =
-        widget.pairResult ? 'ECG Graph Display' : 'No Device Found...';
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -82,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) =>
-                        DevicePairingPage(title: widget.title),
+                        DataPage(icon: Icons.water_drop, color: Colors.blue, title: widget.title),
                   ),
                 );
               },

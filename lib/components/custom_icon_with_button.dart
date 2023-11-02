@@ -27,7 +27,7 @@ class CustomIconWithButton extends StatelessWidget {
             print('Going to ${text} page!');
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => DevicePairingPage(title: text),
+                builder: (context) => DataPage(icon: icon, color: color, title: text),
               ),
             );
           },
