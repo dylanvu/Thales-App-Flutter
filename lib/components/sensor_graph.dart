@@ -28,18 +28,18 @@ class _SensorGraphState extends State<SensorGraph> {
       title: ChartTitle(
           text: widget.title,
           textStyle: const TextStyle(fontSize: 20, color: Colors.white)),
-      series: <LineSeries<HeartRateData, String>>[
-        LineSeries<HeartRateData, String>(
+      series: <LineSeries<GraphData, String>>[
+        LineSeries<GraphData, String>(
           // Bind data source
-          dataSource: <HeartRateData>[
-            HeartRateData('0 min', 62),
-            HeartRateData('5 min', 65),
-            HeartRateData('10 min', 67),
-            HeartRateData('15 min', 66),
-            HeartRateData('20 min', 68)
+          dataSource: <GraphData>[
+            GraphData('${0} min', 62),
+            GraphData('${5} min', 65),
+            GraphData('${10} min', 67),
+            GraphData('${15} min', 66),
+            GraphData('${20} min', 68)
           ],
-          xValueMapper: (HeartRateData person, _) => person.time,
-          yValueMapper: (HeartRateData person, _) => person.rate,
+          xValueMapper: (GraphData person, _) => person.x,
+          yValueMapper: (GraphData person, _) => person.y,
           dataLabelSettings: const DataLabelSettings(
               isVisible: true,
               textStyle: TextStyle(fontSize: 15, color: Colors.white)),
@@ -49,8 +49,8 @@ class _SensorGraphState extends State<SensorGraph> {
   }
 }
 
-class HeartRateData {
-  HeartRateData(this.time, this.rate);
-  final String time;
-  final double rate;
+class GraphData {
+  GraphData(this.x, this.y);
+  final String x;
+  final double y;
 }
