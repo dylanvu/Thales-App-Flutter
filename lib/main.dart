@@ -22,15 +22,13 @@ class MyApp extends StatelessWidget {
           background: const Color.fromARGB(255, 32, 32, 32),
         ), // Color Scheme
       ),
-      home: const MyHomePage(
-          title: 'Thales Wellness App Home Page'),
+      home: const MyHomePage(title: 'Thales Wellness App Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title})
-      : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -72,23 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 50),
-            ElevatedButton(
-              onPressed: () {
-                print('Pairing Device!');
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        DataPage(icon: Icons.water_drop, color: Colors.blue, title: widget.title),
-                  ),
-                );
-              },
-              child: const Text(
-                'Pair with ECG Device',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            const SizedBox(height: 20),
           ],
         ),
       ),
