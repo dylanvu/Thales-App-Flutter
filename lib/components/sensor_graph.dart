@@ -10,6 +10,14 @@ class SensorGraph extends StatefulWidget {
 }
 
 class _SensorGraphState extends State<SensorGraph> {
+  List<GraphData> sensorData = [
+    GraphData('${0} min', 62),
+    GraphData('${5} min', 65),
+    GraphData('${10} min', 67),
+    GraphData('${15} min', 66),
+    GraphData('${20} min', 68)
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SfCartesianChart(
@@ -31,15 +39,9 @@ class _SensorGraphState extends State<SensorGraph> {
       series: <LineSeries<GraphData, String>>[
         LineSeries<GraphData, String>(
           // Bind data source
-          dataSource: <GraphData>[
-            GraphData('${0} min', 62),
-            GraphData('${5} min', 65),
-            GraphData('${10} min', 67),
-            GraphData('${15} min', 66),
-            GraphData('${20} min', 68)
-          ],
-          xValueMapper: (GraphData person, _) => person.x,
-          yValueMapper: (GraphData person, _) => person.y,
+          dataSource: sensorData,
+          xValueMapper: (GraphData entry, _) => entry.x,
+          yValueMapper: (GraphData entry, _) => entry.y,
           dataLabelSettings: const DataLabelSettings(
               isVisible: true,
               textStyle: TextStyle(fontSize: 15, color: Colors.white)),
