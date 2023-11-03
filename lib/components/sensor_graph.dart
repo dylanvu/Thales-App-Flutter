@@ -15,8 +15,10 @@ class _SensorGraphState extends State<SensorGraph> {
     GraphData('${5} min', 65),
     GraphData('${10} min', 67),
     GraphData('${15} min', 66),
-    GraphData('${20} min', 68)
+    GraphData('${20} min', 68),
   ];
+
+  // TODO: need to call a function that we pass in, that defines how the data is collected, and use that to update the sensor data state
 
   @override
   Widget build(BuildContext context) {
