@@ -5,7 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DataPage extends StatefulWidget {
-  const DataPage({Key? key, required this.icon, required this.color, required this.title}) : super(key: key);
+  const DataPage(
+      {Key? key, required this.icon, required this.color, required this.title})
+      : super(key: key);
 
   final String title;
   final Color color;
@@ -28,10 +30,10 @@ class _DataPageState extends State<DataPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Text(
                 widget.title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 50,
                   color: Colors.white,
                 ),
@@ -45,22 +47,26 @@ class _DataPageState extends State<DataPage> {
                 SfCartesianChart(
                   plotAreaBorderColor: Colors.white,
                   plotAreaBorderWidth: 5,
-                  
                   primaryXAxis: CategoryAxis(
-                    axisLine: AxisLine(color: Colors.white, width: 3),
-                    majorGridLines: MajorGridLines(color: Colors.white),
-                    labelStyle: TextStyle(color: Colors.white, fontSize: 15),
+                    axisLine: const AxisLine(color: Colors.white, width: 3),
+                    majorGridLines: const MajorGridLines(color: Colors.white),
+                    labelStyle:
+                        const TextStyle(color: Colors.white, fontSize: 15),
                   ),
                   primaryYAxis: NumericAxis(
-                    axisLine: AxisLine(color: Colors.white, width: 3),
-                    majorGridLines: MajorGridLines(color: Colors.white),
-                    labelStyle: TextStyle(color: Colors.white, fontSize: 15),
+                    axisLine: const AxisLine(color: Colors.white, width: 3),
+                    majorGridLines: const MajorGridLines(color: Colors.white),
+                    labelStyle:
+                        const TextStyle(color: Colors.white, fontSize: 15),
                   ),
-                  title: ChartTitle(text: widget.title, textStyle: TextStyle(fontSize: 20, color: Colors.white)),
+                  title: ChartTitle(
+                      text: widget.title,
+                      textStyle:
+                          const TextStyle(fontSize: 20, color: Colors.white)),
                   series: <LineSeries<HeartRateData, String>>[
                     LineSeries<HeartRateData, String>(
-                    // Bind data source
-                      dataSource:  <HeartRateData>[
+                      // Bind data source
+                      dataSource: <HeartRateData>[
                         HeartRateData('0 min', 62),
                         HeartRateData('5 min', 65),
                         HeartRateData('10 min', 67),
@@ -69,9 +75,12 @@ class _DataPageState extends State<DataPage> {
                       ],
                       xValueMapper: (HeartRateData person, _) => person.time,
                       yValueMapper: (HeartRateData person, _) => person.rate,
-                      dataLabelSettings: DataLabelSettings(isVisible: true, textStyle: TextStyle(fontSize: 15, color: Colors.white)),
+                      dataLabelSettings: const DataLabelSettings(
+                          isVisible: true,
+                          textStyle:
+                              TextStyle(fontSize: 15, color: Colors.white)),
                     )
-                  ]
+                  ],
                 ),
                 const SizedBox(width: 300),
                 Icon(
@@ -81,7 +90,6 @@ class _DataPageState extends State<DataPage> {
                 ),
               ],
             ),
-            
           ],
         ),
       ),
@@ -89,8 +97,8 @@ class _DataPageState extends State<DataPage> {
   }
 }
 
-class HeartRateData{
-    HeartRateData(this.time, this.rate);
-    final String time;
-    final double rate;
+class HeartRateData {
+  HeartRateData(this.time, this.rate);
+  final String time;
+  final double rate;
 }
