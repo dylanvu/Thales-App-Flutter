@@ -1,4 +1,4 @@
-import 'package:ecg_app/device_search.dart';
+import 'package:ecg_app/data_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'components/custom_icon_with_button.dart';
@@ -17,9 +17,8 @@ class MyApp extends StatelessWidget {
       title: 'ECG App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: const Color.fromARGB(255, 255, 145, 145),
-          secondary: const Color.fromARGB(255, 120, 148, 230),
-          background: const Color.fromARGB(255, 32, 32, 32),
+          primary: const Color(0xFF333333),
+          background: const Color(0xFF4F5357),
         ), // Color Scheme
       ),
       home: const MyHomePage(title: 'Thales Wellness App Home Page'),
@@ -55,17 +54,17 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 CustomIconWithButton(
                   icon: FontAwesomeIcons.heartPulse,
-                  color: Colors.red,
+                  color: const Color(0xFFD54E4E),
                   text: "Heart Rate Monitor",
                 ),
                 CustomIconWithButton(
                   icon: Icons.water_drop,
-                  color: Colors.blue,
+                  color: const Color(0xFF7E99C3),
                   text: "Hydration Sensor",
                 ),
                 CustomIconWithButton(
                   icon: Icons.thermostat,
-                  color: Colors.green,
+                  color: const Color(0xFF639269),
                   text: "Body Temp Monitor",
                 ),
               ],

@@ -46,13 +46,30 @@ class _DataPageState extends State<DataPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SensorGraph(title: widget.title),
-                const SizedBox(width: 300),
-                Icon(
-                  widget.icon,
-                  size: 250,
-                  color: widget.color,
+                const SizedBox(width: 100),
+                const Text(
+                  '''
+                    Current:
+                    Average:
+                  ''',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 30),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Icon(
+                  widget.icon,
+                  size: 150,
+                  color: widget.color,
+                ),
+              ),
             ),
           ],
         ),
