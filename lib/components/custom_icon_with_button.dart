@@ -1,4 +1,4 @@
-import 'package:ecg_app/device_search.dart';
+import 'package:ecg_app/data_page.dart';
 import 'package:flutter/material.dart';
 
 class CustomIconWithButton extends StatelessWidget {
@@ -16,7 +16,7 @@ class CustomIconWithButton extends StatelessWidget {
       children: [
         Icon(
           icon,
-          size: 100,
+          size: 200,
           color: color,
         ),
         const SizedBox(
@@ -34,7 +34,7 @@ class CustomIconWithButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: color,
           ),
-          child: Text(text),
+          child: Text(text, style: const TextStyle(fontSize: 25)),
         ),
       ],
     );
