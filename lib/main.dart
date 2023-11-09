@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: const Color(0xFF333333),
-          background: const Color(0xFF4F5357),
+          background: const Color(0xFF484554),
         ), // Color Scheme
       ),
       home: const MyHomePage(title: 'Thales Wellness App Home Page'),
