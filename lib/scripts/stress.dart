@@ -1,6 +1,8 @@
 import 'dart:math';
 
-double calculateStandardDeviation(List<num> numbers) {
+// Higher RMSSD and SDNN values are generally associated with better overall health and greater heart rate variability, which is often seen as a sign of a healthy autonomic nervous system.
+
+double calculateStandardDeviation(List<double> numbers) {
   if (numbers.isEmpty) {
     throw ArgumentError('The list must not be empty.');
   }
@@ -28,7 +30,7 @@ double calculateStandardDeviation(List<num> numbers) {
   return standardDeviation;
 }
 
-double calculateRootMeanSquareDifference(List<num> numbers) {
+double calculateRootMeanSquareDifference(List<double> numbers) {
   if (numbers.isEmpty) {
     throw ArgumentError('The list must not be empty.');
   }
@@ -43,4 +45,26 @@ double calculateRootMeanSquareDifference(List<num> numbers) {
       sqrt(sumOfSquaredDifferences / numbers.length);
 
   return rootMeanSquareDifference;
+}
+
+/// this function will take in a list of numbers to generate a new entry from, calculate the new value, then add it to the input list
+/// sourceNumbers: numbers to generate a new value from using numFunct
+/// numFunct: the function used to generate a new value
+/// currentNumbers: the current numbers in the array that we will be graphing
+/// maxLength: the array will be be at most this many elements long
+/// Example usage: stress = addEntryToList(heartRateTimeDifferences, calculateStandardDeviation, stress, 5)
+List<double> addEntryToList(
+    List<double> sourceNumbers,
+    double Function(List<double> numbers) numFunct,
+    List<double> currentNumbers,
+    int maxLength) {
+  // use the source numbers to calculate a new value off of
+  double newValue = numFunct(sourceNumbers);
+  // add this new value to the list of numbers and return it
+  currentNumbers.add(newValue);
+  if (currentNumbers.length > maxLength) {
+    // remove the first value of currentNumbers
+    currentNumbers.removeAt(0);
+  }
+  return currentNumbers;
 }
