@@ -2,12 +2,18 @@ import 'package:ecg_app/data_page.dart';
 import 'package:flutter/material.dart';
 
 class CustomIconWithButton extends StatelessWidget {
-  CustomIconWithButton(
-      {super.key, required this.icon, required this.color, required this.text});
+  CustomIconWithButton({
+    super.key,
+    required this.icon,
+    required this.color,
+    required this.text,
+    this.interactive = false,
+  });
 
   IconData icon;
   Color color;
   String text;
+  bool interactive;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,12 @@ class CustomIconWithButton extends StatelessWidget {
             print('Going to ${text} page!');
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => DataPage(icon: icon, color: color, title: text),
+                builder: (context) => DataPage(
+                  icon: icon,
+                  color: color,
+                  title: text,
+                  interactive: interactive,
+                ),
               ),
             );
           },
