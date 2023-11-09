@@ -4,13 +4,18 @@ import 'package:ecg_app/components/sensor_graph.dart';
 import 'package:flutter/material.dart';
 
 class DataPage extends StatefulWidget {
-  const DataPage(
-      {Key? key, required this.icon, required this.color, required this.title})
+  DataPage(
+      {Key? key,
+      required this.icon,
+      required this.color,
+      required this.title,
+      this.interactive = false})
       : super(key: key);
 
   final String title;
   final Color color;
   final IconData icon;
+  bool interactive;
 
   @override
   State<DataPage> createState() => _DataPageState();
@@ -24,6 +29,9 @@ class _DataPageState extends State<DataPage> {
     GraphData('${15} min', 66),
     GraphData('${20} min', 68),
   ];
+
+  bool switchState = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +71,16 @@ class _DataPageState extends State<DataPage> {
                   ),
                   textAlign: TextAlign.center,
                 ),
+                if (widget.interactive)
+                  Switch(
+                    value: switchState,
+                    activeColor: widget.color,
+                    onChanged: (bool value) {
+                      setState(() {
+                        switchState = value;
+                      });
+                    },
+                  ),
               ],
             ),
             Padding(

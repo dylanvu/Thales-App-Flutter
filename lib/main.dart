@@ -61,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: Icons.show_chart,
                   color: Color.fromARGB(255, 163, 78, 213),
                   text: "Stress Level Monitor",
+                  interactive: true,
                 ),
                 CustomIconWithButton(
                   icon: Icons.water_drop,
