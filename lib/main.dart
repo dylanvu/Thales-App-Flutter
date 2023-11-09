@@ -43,12 +43,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        backgroundColor: Color(0xFF242A75),
         toolbarHeight: 110,
         title: Text(
           widget.title, 
           style: const TextStyle(fontSize: 30),
         ),
-        actions: [Image.asset('images/thales_logo_black_white.png')],
+        actions: [Image.asset('images/thales_logo_blue.png')],
       ),
       body: Center(
         child: Column(

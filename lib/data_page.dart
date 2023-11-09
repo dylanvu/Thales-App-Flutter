@@ -37,7 +37,13 @@ class _DataPageState extends State<DataPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: Text(widget.title),
+        backgroundColor: Color(0xFF242A75),
+        toolbarHeight: 110,
+        title: Text(
+          widget.title, 
+          style: const TextStyle(fontSize: 30),
+        ),
+        actions: [Image.asset('images/thales_logo_blue.png')],
       ),
       body: Center(
         child: Column(
@@ -60,27 +66,43 @@ class _DataPageState extends State<DataPage> {
               children: <Widget>[
                 SensorGraph(title: widget.title, sensorData: sensorData),
                 const SizedBox(width: 100),
-                Text(
-                  '''
-                    Current: ${sensorData.last.y}
-                    Average: ${calculateAverage(sensorData)}
-                  ''',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Current: ${sensorData.last.y}\nAverage: ${calculateAverage(sensorData)}',
+                      style: const TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 80),
+                    if (widget.interactive)
+                      Column(
+                        children: [
+                          Transform.scale(scale: 2, alignment: Alignment.center,
+                            child: Switch(
+                              value: switchState,
+                              activeColor: widget.color,
+                              splashRadius: 20,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  switchState = value;
+                                });
+                              },
+                            ),
+                          ),
+                          const Text(
+                            "Activate Destressor Device",
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
                 ),
-                if (widget.interactive)
-                  Switch(
-                    value: switchState,
-                    activeColor: widget.color,
-                    onChanged: (bool value) {
-                      setState(() {
-                        switchState = value;
-                      });
-                    },
-                  ),
               ],
             ),
             Padding(
