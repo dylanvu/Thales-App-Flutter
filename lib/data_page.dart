@@ -17,6 +17,13 @@ class DataPage extends StatefulWidget {
 }
 
 class _DataPageState extends State<DataPage> {
+  List<GraphData> sensorData = [
+    GraphData('${0} min', 62),
+    GraphData('${5} min', 65),
+    GraphData('${10} min', 67),
+    GraphData('${15} min', 66),
+    GraphData('${20} min', 68),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,14 +50,14 @@ class _DataPageState extends State<DataPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SensorGraph(title: widget.title),
+                SensorGraph(title: widget.title, sensorData: sensorData),
                 const SizedBox(width: 100),
-                const Text(
+                Text(
                   '''
-                    Current:
-                    Average:
+                    Current: ${sensorData.last.y}
+                    Average: ${calculateAverage(sensorData)}
                   ''',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                   ),
@@ -74,4 +81,12 @@ class _DataPageState extends State<DataPage> {
       ),
     );
   }
+}
+
+double calculateAverage(List<GraphData> nums) {
+  double sum = 0;
+  for (GraphData entry in nums) {
+    sum += entry.y;
+  }
+  return sum / nums.length;
 }
