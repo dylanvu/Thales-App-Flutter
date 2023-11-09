@@ -63,6 +63,8 @@ flutter:
   assets:
     - images/thales_logo_black_white.png
     - images/thales_logo_blue.png
+    - images/thales_logo_white.png
+    - images/thales_logo_no_background.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

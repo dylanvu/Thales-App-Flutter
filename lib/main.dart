@@ -18,10 +18,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: const Color(0xFF333333),
-          background: const Color(0xFF484554),
+          background: const Color(0xFF4F5357),
         ), // Color Scheme
       ),
-      home: const MyHomePage(title: 'Thales Wellness App Home Page'),
+      home: const MyHomePage(title: 'Wellness Home Page'),
     );
   }
 }
@@ -43,13 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Color(0xFF242A75),
         toolbarHeight: 110,
         title: Text(
           widget.title, 
           style: const TextStyle(fontSize: 30),
         ),
-        actions: [Image.asset('images/thales_logo_blue.png')],
+        actions: [Padding(padding: EdgeInsets.only(right: 30), child: SizedBox(width: 450, height: 450, child: Image.asset('images/thales_logo_no_background.png')))],
       ),
       body: Center(
         child: Column(
