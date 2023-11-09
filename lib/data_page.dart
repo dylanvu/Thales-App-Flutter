@@ -59,7 +59,7 @@ class _DataPageState extends State<DataPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -110,7 +110,7 @@ class _DataPageState extends State<DataPage> {
                 alignment: Alignment.bottomRight,
                 child: Icon(
                   widget.icon,
-                  size: 150,
+                  size: 120,
                   color: widget.color,
                 ),
               ),
