@@ -2,8 +2,6 @@
 
 import 'package:ecg_app/components/sensor_graph.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DataPage extends StatefulWidget {
   const DataPage(
