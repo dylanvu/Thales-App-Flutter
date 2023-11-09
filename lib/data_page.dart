@@ -37,13 +37,12 @@ class _DataPageState extends State<DataPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Color(0xFF242A75),
-        toolbarHeight: 110,
+        toolbarHeight: 80,
         title: Text(
           widget.title, 
           style: const TextStyle(fontSize: 30),
         ),
-        actions: [Image.asset('images/thales_logo_blue.png')],
+        actions: [Padding(padding: EdgeInsets.only(right: 50), child: SizedBox(width: 350, height: 350, child: Image.asset('images/thales_logo_no_background.png')))],
       ),
       body: Center(
         child: Column(
