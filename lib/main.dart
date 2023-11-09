@@ -58,6 +58,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   text: "Heart Rate Monitor",
                 ),
                 CustomIconWithButton(
+                  icon: Icons.show_chart,
+                  color: Color.fromARGB(255, 163, 78, 213),
+                  text: "Stress Level Monitor",
+                ),
+                CustomIconWithButton(
                   icon: Icons.water_drop,
                   color: const Color(0xFF7E99C3),
                   text: "Hydration Sensor",
