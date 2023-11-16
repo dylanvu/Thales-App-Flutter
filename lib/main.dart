@@ -1,7 +1,7 @@
-import 'package:thales_wellness/data_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'components/custom_icon_with_button.dart';
+import 'components/bluetooth_handler.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,6 +37,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool switchPressed = false;
+
+  BluetoothHandler bluetoothHandler = BluetoothHandler();
+
+  @override
+  void initState() {
+    super.initState();
+    initBluetooth();
+  }
+
+  Future<void> initBluetooth() async {
+    await bluetoothHandler.startBluetooth();
+    // TODO: Add logic to connect to a specific device based on your requirements
+  }
 
   @override
   Widget build(BuildContext context) {
