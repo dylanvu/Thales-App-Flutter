@@ -1,4 +1,4 @@
-import 'package:ecg_app/data_page.dart';
+import 'package:thales_wellness/data_page.dart';
 import 'package:flutter/material.dart';
 
 class CustomIconWithButton extends StatelessWidget {
@@ -17,6 +17,20 @@ class CustomIconWithButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void navigateToDataPage() {
+      print('Going to $text page!');
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DataPage(
+            icon: icon,
+            color: color,
+            title: text,
+            interactive: interactive,
+          ),
+        ),
+      );
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -30,17 +44,7 @@ class CustomIconWithButton extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            print('Going to ${text} page!');
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DataPage(
-                  icon: icon,
-                  color: color,
-                  title: text,
-                  interactive: interactive,
-                ),
-              ),
-            );
+            navigateToDataPage();
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: color,

@@ -2,6 +2,12 @@
 
 This is a new Flutter project!
 
+## Install App
+* Enable developer settings
+* Enable USB debugging
+* Run "flutter build apk"
+* Run "flutter install"
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

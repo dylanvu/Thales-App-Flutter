@@ -1,4 +1,4 @@
-import 'package:ecg_app/data_page.dart';
+import 'package:thales_wellness/data_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'components/custom_icon_with_button.dart';
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ECG App',
+      title: 'Thales Wellness',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: const Color(0xFF333333),
@@ -45,10 +45,17 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         toolbarHeight: 80,
         title: Text(
-          widget.title, 
+          widget.title,
           style: const TextStyle(fontSize: 30),
         ),
-        actions: [Padding(padding: EdgeInsets.only(right: 50), child: SizedBox(width: 350, height: 350, child: Image.asset('images/thales_logo_no_background.png')))],
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(right: 50),
+              child: SizedBox(
+                  width: 350,
+                  height: 350,
+                  child: Image.asset('images/thales_logo_no_background.png')))
+        ],
       ),
       body: Center(
         child: Column(

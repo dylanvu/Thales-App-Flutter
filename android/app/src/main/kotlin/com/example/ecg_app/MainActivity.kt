@@ -1,4 +1,4 @@
-package com.example.ecg_app
+package com.example.thales_wellness
 
 import io.flutter.embedding.android.FlutterActivity
 

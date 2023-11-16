@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "ecg_app" "\0"
+            VALUE "FileDescription", "thales_wellness" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "ecg_app" "\0"
+            VALUE "InternalName", "thales_wellness" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "ecg_app.exe" "\0"
-            VALUE "ProductName", "ecg_app" "\0"
+            VALUE "OriginalFilename", "thales_wellness.exe" "\0"
+            VALUE "ProductName", "thales_wellness" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

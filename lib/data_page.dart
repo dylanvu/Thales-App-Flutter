@@ -1,6 +1,6 @@
 /* Page to show while looking for device */
 
-import 'package:ecg_app/components/sensor_graph.dart';
+import 'package:thales_wellness/components/sensor_graph.dart';
 import 'package:flutter/material.dart';
 
 class DataPage extends StatefulWidget {
@@ -39,10 +39,17 @@ class _DataPageState extends State<DataPage> {
       appBar: AppBar(
         toolbarHeight: 80,
         title: Text(
-          widget.title, 
+          widget.title,
           style: const TextStyle(fontSize: 30),
         ),
-        actions: [Padding(padding: EdgeInsets.only(right: 50), child: SizedBox(width: 350, height: 350, child: Image.asset('images/thales_logo_no_background.png')))],
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(right: 50),
+              child: SizedBox(
+                  width: 350,
+                  height: 350,
+                  child: Image.asset('images/thales_logo_no_background.png')))
+        ],
       ),
       body: Center(
         child: Column(
@@ -79,7 +86,9 @@ class _DataPageState extends State<DataPage> {
                     if (widget.interactive)
                       Column(
                         children: [
-                          Transform.scale(scale: 2, alignment: Alignment.center,
+                          Transform.scale(
+                            scale: 2,
+                            alignment: Alignment.center,
                             child: Switch(
                               value: switchState,
                               activeColor: widget.color,

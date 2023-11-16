@@ -1,6 +1,6 @@
 {
-    "name": "ecg_app",
-    "short_name": "ecg_app",
+    "name": "thales_wellness",
+    "short_name": "thales_wellness",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
