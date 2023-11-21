@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> initBluetooth() async {
     await bluetoothHandler.startBluetooth();
-    // TODO: Add logic to connect to a specific device based on your requirements
+    await bluetoothHandler.startScanning();
   }
 
   @override
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 CustomIconWithButton(
                   icon: Icons.show_chart,
-                  color: Color.fromARGB(255, 163, 78, 213),
+                  color: const Color.fromARGB(255, 163, 78, 213),
                   text: "Stress Level Monitor",
                   interactive: true,
                 ),
@@ -98,6 +98,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: const Color(0xFF639269),
                   text: "Body Temp Monitor",
                 ),
+                // ElevatedButton(
+                //   onPressed: bluetoothHandler.startScanning,
+                //   child: const Text("bluetooth"),
+                // ),
               ],
             ),
           ],
