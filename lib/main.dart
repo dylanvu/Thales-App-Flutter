@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:thales_wellness/serial_debug_page.dart';
 import 'components/custom_icon_with_button.dart';
 import 'components/bluetooth_handler.dart';
 
@@ -98,10 +99,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: const Color(0xFF639269),
                   text: "Body Temp Monitor",
                 ),
-                // ElevatedButton(
-                //   onPressed: bluetoothHandler.startScanning,
-                //   child: const Text("bluetooth"),
-                // ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SerialDebugPage(
+                          title: "Serial Debug",
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text("Go to serial debug page"),
+                ),
               ],
             ),
           ],

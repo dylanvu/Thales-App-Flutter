@@ -55,9 +55,9 @@ class BluetoothHandler {
     FlutterBluePlus.scanResults.listen((results) async {
       for (ScanResult result in results) {
         if (result.device.platformName == "ESP32 Thales") {
+          await connectToDevice(result.device);
           print("Thales connected");
           print(result);
-          _device = result.device;
           await stopScanning();
         }
       }
@@ -104,18 +104,30 @@ class BluetoothHandler {
       print('Error: No device connected');
       return;
     }
+    print("Sending data" + data);
+    List<BluetoothService> services = await _device!.discoverServices();
+    for (BluetoothService service in services) {
+      for (BluetoothCharacteristic characteristic in service.characteristics) {
+        await characteristic.write(utf8.encode(data));
+      }
+    }
+    print("Bluetooth peripheral not found");
+  }
 
-    if (_device != null) {
-      await _device!.discoverServices();
-      List<BluetoothService> services = await _device!.discoverServices();
-      for (BluetoothService service in services) {
-        for (BluetoothCharacteristic characteristic
-            in service.characteristics) {
-          await characteristic.write(utf8.encode(data));
+  Future<void> receiveData() async {
+    if (_device == null) {
+      print('Error: No device connected');
+      return;
+    }
+
+    List<BluetoothService> services = await _device!.discoverServices();
+    for (BluetoothService service in services) {
+      for (BluetoothCharacteristic characteristic in service.characteristics) {
+        if (characteristic.properties.read) {
+          List<int> value = await characteristic.read();
+          print(value);
         }
       }
-    } else {
-      print("Bluetooth peripheral not found");
     }
   }
 }
