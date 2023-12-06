@@ -10,8 +10,11 @@ class USBDebugMonitorPage extends StatefulWidget {
   final String title;
   USBHandler usbHandler;
 
-  USBDebugMonitorPage({Key? key, required this.title, required this.usbHandler})
-      : super(key: key);
+  USBDebugMonitorPage({
+    Key? key,
+    required this.title,
+    required this.usbHandler,
+  }) : super(key: key);
 
   @override
   _USBDebugMonitorPageState createState() => _USBDebugMonitorPageState();
