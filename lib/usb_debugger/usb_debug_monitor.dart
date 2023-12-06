@@ -2,14 +2,15 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:thales_wellness/components/usb_handler.dart';
 import 'package:usb_serial/transaction.dart';
 import 'package:usb_serial/usb_serial.dart';
 
 class USBDebugMonitorPage extends StatefulWidget {
   final String title;
-  void Function(USBPortAndDevice) setPort;
+  USBHandler usbHandler;
 
-  USBDebugMonitorPage({Key? key, required this.title, required this.setPort})
+  USBDebugMonitorPage({Key? key, required this.title, required this.usbHandler})
       : super(key: key);
 
   @override
@@ -26,73 +27,48 @@ class _USBDebugMonitorPageState extends State<USBDebugMonitorPage> {
   Transaction<String>? _transaction;
   UsbDevice? _device;
 
-  TextEditingController _textController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
+
+  void updateSerialData(String newData) {
+    setState(() {
+      _serialData.add(Text(newData));
+      if (_serialData.length > 20) {
+        _serialData.removeAt(0);
+      }
+    });
+  }
 
   Future<bool> _connectTo(device) async {
-    _serialData.clear();
-
-    if (_subscription != null) {
-      _subscription!.cancel();
-      _subscription = null;
-    }
-
-    if (_transaction != null) {
-      _transaction!.dispose();
-      _transaction = null;
-    }
-
-    if (_port != null) {
-      _port!.close();
-      _port = null;
+    bool connectionRes = await widget.usbHandler.connectTo(device);
+    if (!connectionRes) {
+      return false;
     }
 
     if (device == null) {
-      _device = null;
       setState(() {
         _status = "Disconnected";
       });
+      _device = null;
       return true;
     } else {
-      if (_port != null) {
-        widget.setPort(USBPortAndDevice(_port!, device));
-      }
+      _device = device;
+      // open the stream
+      widget.usbHandler.subscribe(callback: updateSerialData);
     }
-
-    _port = await device.create();
-    if (await (_port!.open()) != true) {
-      setState(() {
-        _status = "Failed to open port";
-      });
-      return false;
-    }
-    _device = device;
-
-    await _port!.setDTR(true);
-    await _port!.setRTS(true);
-    await _port!.setPortParameters(
-        115200, UsbPort.DATABITS_8, UsbPort.STOPBITS_1, UsbPort.PARITY_NONE);
-
-    _transaction = Transaction.stringTerminated(
-        _port!.inputStream as Stream<Uint8List>, Uint8List.fromList([13, 10]));
-
-    _subscription = _transaction!.stream.listen((String line) {
-      setState(() {
-        _serialData.add(Text(line));
-        if (_serialData.length > 20) {
-          _serialData.removeAt(0);
-        }
-      });
-    });
 
     setState(() {
       _status = "Connected";
+      _port = widget.usbHandler.currentlyConnectedPort;
     });
     return true;
   }
 
   void _getPorts() async {
     _ports = [];
-    List<UsbDevice> devices = await UsbSerial.listDevices();
+    await widget.usbHandler.getPorts();
+
+    List<UsbDevice> devices = widget.usbHandler.availableDevices;
+
     if (!devices.contains(_device)) {
       _connectTo(null);
     }
@@ -126,13 +102,28 @@ class _USBDebugMonitorPageState extends State<USBDebugMonitorPage> {
       _getPorts();
     });
 
+    _device = widget.usbHandler.currentlyConnectedDevice;
+
     _getPorts();
+
+    setState(() {
+      _status = widget.usbHandler.currentlyConnectedDevice == null
+          ? "Disconnected"
+          : "Connected";
+
+      _port = widget.usbHandler.currentlyConnectedPort;
+    });
+
+    if (widget.usbHandler.currentlyConnectedDevice != null) {
+      // open the stream
+      widget.usbHandler.subscribe(callback: updateSerialData);
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    _connectTo(null);
+    widget.usbHandler.disposeStream();
   }
 
   @override
@@ -194,14 +185,5 @@ class _USBDebugMonitorPageState extends State<USBDebugMonitorPage> {
         ),
       ),
     );
-  }
-}
-
-class USBPortAndDevice {
-  late UsbPort port;
-  late UsbDevice device;
-  USBPortAndDevice(UsbPort p, UsbDevice d) {
-    port = p;
-    device = d;
   }
 }
