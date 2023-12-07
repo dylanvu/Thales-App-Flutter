@@ -137,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     // subscribe to the stream
-                    const USBSubscriber(),
+                    USBSubscriber(),
                     Consumer<USBHandler>(builder: (context, usbHandler, child) {
                       if (usbHandler.serialData.isNotEmpty) {
                         return Text(

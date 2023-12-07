@@ -25,6 +25,9 @@ class _SensorGraphState extends State<SensorGraph> {
         labelStyle: const TextStyle(color: Colors.white, fontSize: 15),
       ),
       primaryYAxis: NumericAxis(
+        // TODO: make this more variable
+        minimum: 0,
+        maximum: 200,
         axisLine: const AxisLine(color: Colors.white, width: 3),
         majorGridLines: const MajorGridLines(color: Colors.white),
         labelStyle: const TextStyle(color: Colors.white, fontSize: 15),

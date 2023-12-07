@@ -24,21 +24,6 @@ class DataPage extends StatefulWidget {
 }
 
 class _DataPageState extends State<DataPage> {
-  List<String> data = [];
-
-  List<GraphData> sensorData = [
-    // GraphData('${0} min', double.parse(data.elementAt(0))),
-    // GraphData('${5} min', 65),
-    // GraphData('${10} min', 67),
-    // GraphData('${15} min', 66),
-    // GraphData('${20} min', 68),
-  ];
-  void addSensorData(String entry) {
-    setState(() {
-      sensorData.add(GraphData('${0} min', double.parse(entry)));
-    });
-  }
-
   bool switchState = false;
 
   @override
@@ -53,7 +38,7 @@ class _DataPageState extends State<DataPage> {
         ),
         actions: [
           Padding(
-              padding: EdgeInsets.only(right: 50),
+              padding: const EdgeInsets.only(right: 50),
               child: SizedBox(
                   width: 350,
                   height: 350,
@@ -64,13 +49,15 @@ class _DataPageState extends State<DataPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const USBSubscriber(),
+            USBSubscriber(),
             Consumer<USBHandler>(builder: (context, usbHandler, child) {
               if (usbHandler.serialData.isNotEmpty) {
-                  addSensorData(usbHandler.serialData.last);
-              
+                // Future.delayed(Duration.zero, () async {
+                //   addSensorData(usbHandler.serialData.last);
+                // });
+
                 return Text(
-                  "Newest data: \"${usbHandler.serialData.last}\"", 
+                  "Newest data: \"${usbHandler.serialData.last}\"",
                   style: const TextStyle(
                     fontSize: 15,
                     color: Colors.white,
@@ -78,11 +65,12 @@ class _DataPageState extends State<DataPage> {
                 );
               } else {
                 return const Text(
-                  "No data available", 
+                  "No data available",
                   style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                ),);
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                );
               }
             }),
             Padding(
@@ -100,17 +88,37 @@ class _DataPageState extends State<DataPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SensorGraph(title: widget.title, sensorData: sensorData),
+                Consumer<USBHandler>(builder: (context, usbHandler, child) {
+                  List<GraphData> sensorData =
+                      usbHandler.serialDataToGraphData();
+                  // cap the amount of data
+                  if (sensorData.length > 20) {
+                    sensorData.removeAt(0);
+                  }
+                  return SensorGraph(
+                      title: widget.title, sensorData: sensorData);
+                }),
                 const SizedBox(width: 100),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'Current: ${sensorData.isEmpty ? "None" : sensorData.last.y}\nAverage: ${calculateAverage(sensorData)}',
-                      style: const TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                      ),
+                    Consumer<USBHandler>(
+                      builder: (context, usbHandler, child) {
+                        // parse for the average
+                        List<GraphData> sensorData =
+                            usbHandler.serialDataToGraphData();
+                        // cap the amount of data
+                        if (sensorData.length > 20) {
+                          sensorData.removeAt(0);
+                        }
+                        return Text(
+                          'Current: ${usbHandler.serialData.isEmpty ? "None" : sensorData.last.y}\nAverage: ${calculateAverage(sensorData).toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(height: 80),
                     if (widget.interactive)

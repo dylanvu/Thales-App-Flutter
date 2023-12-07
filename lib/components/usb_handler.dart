@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:thales_wellness/components/sensor_graph.dart';
 import 'package:usb_serial/transaction.dart';
 import 'package:usb_serial/usb_serial.dart';
 
@@ -85,6 +86,9 @@ class USBHandler extends ChangeNotifier {
       print("currently connected port is null");
       return;
     }
+    if (_subscription != null) {
+      disposeStream();
+    }
     _transaction = Transaction.stringTerminated(
         currentlyConnectedPort!.inputStream as Stream<Uint8List>,
         Uint8List.fromList([13, 10]));
@@ -112,18 +116,35 @@ class USBHandler extends ChangeNotifier {
       _transaction = null;
     }
   }
+
+  List<GraphData> serialDataToGraphData() {
+    List<GraphData> sensorData = [];
+    for (String entry in serialData) {
+      if (entry.contains("*")) {
+        List<String> split = entry.split("*");
+        sensorData.add(
+            GraphData('${double.parse(split[1])} sec', double.parse(split[0])));
+      } else {
+        sensorData
+            .add(GraphData('${double.parse(entry)} sec', double.parse(entry)));
+      }
+    }
+    return sensorData;
+  }
 }
 
 /// this widget is used solely to subscribe to the stream
 class USBSubscriber extends StatelessWidget {
-  const USBSubscriber({super.key});
+  void Function(String)? callback;
+
+  USBSubscriber({super.key, this.callback});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<USBHandler>(
       builder: (context, usbHandler, child) {
         // subscribe here
-        usbHandler.subscribe();
+        usbHandler.subscribe(callback: callback);
         return const SizedBox.shrink();
       },
     );
