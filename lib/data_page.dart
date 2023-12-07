@@ -2,6 +2,8 @@
 
 import 'package:thales_wellness/components/sensor_graph.dart';
 import 'package:flutter/material.dart';
+import 'components/usb_handler.dart';
+import 'package:provider/provider.dart';
 
 class DataPage extends StatefulWidget {
   DataPage(
@@ -22,13 +24,20 @@ class DataPage extends StatefulWidget {
 }
 
 class _DataPageState extends State<DataPage> {
+  List<String> data = [];
+
   List<GraphData> sensorData = [
-    GraphData('${0} min', 62),
-    GraphData('${5} min', 65),
-    GraphData('${10} min', 67),
-    GraphData('${15} min', 66),
-    GraphData('${20} min', 68),
+    // GraphData('${0} min', double.parse(data.elementAt(0))),
+    // GraphData('${5} min', 65),
+    // GraphData('${10} min', 67),
+    // GraphData('${15} min', 66),
+    // GraphData('${20} min', 68),
   ];
+  void addSensorData(String entry) {
+    setState(() {
+      sensorData.add(GraphData('${0} min', double.parse(entry)));
+    });
+  }
 
   bool switchState = false;
 
@@ -55,6 +64,27 @@ class _DataPageState extends State<DataPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const USBSubscriber(),
+            Consumer<USBHandler>(builder: (context, usbHandler, child) {
+              if (usbHandler.serialData.isNotEmpty) {
+                  addSensorData(usbHandler.serialData.last);
+              
+                return Text(
+                  "Newest data: \"${usbHandler.serialData.last}\"", 
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                );
+              } else {
+                return const Text(
+                  "No data available", 
+                  style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                ),);
+              }
+            }),
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
@@ -76,7 +106,7 @@ class _DataPageState extends State<DataPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Current: ${sensorData.last.y}\nAverage: ${calculateAverage(sensorData)}',
+                      'Current: ${sensorData.isEmpty ? "None" : sensorData.last.y}\nAverage: ${calculateAverage(sensorData)}',
                       style: const TextStyle(
                         fontSize: 25,
                         color: Colors.white,
