@@ -8,6 +8,10 @@ import 'dart:convert';
 class BluetoothHandler {
   BluetoothDevice? _device;
   StreamSubscription<List<ScanResult>>? subscription;
+  String thalesSeriviceUUID = "af97994f-4d78-457e-8e10-05dd0ce6f680";
+  List<String> bluetoothData = [];
+
+  StreamSubscription<List<int>>? _subscription;
 
   Future<void> startBluetooth() async {
     // first, check if bluetooth is supported by your hardware
@@ -95,7 +99,9 @@ class BluetoothHandler {
 
   Future<void> disconnectDevice(BluetoothDevice device) async {
     if (_device != null) {
+      // cancel the stream
       print('Disconnecting from ${_device!.platformName}');
+      disposeStream();
       await _device!.disconnect();
       _device == null;
     }
@@ -116,8 +122,7 @@ class BluetoothHandler {
           print(characteristic.serviceUuid.toString());
 
           if (characteristic.properties.write &&
-              characteristic.serviceUuid.toString() ==
-                  "af97994f-4d78-457e-8e10-05dd0ce6f680") {
+              characteristic.serviceUuid.toString() == thalesSeriviceUUID) {
             print("Sending to ${characteristic.characteristicUuid}");
             String readyData = "$data\r\n";
             await characteristic.write(Uint8List.fromList(readyData.codeUnits));
@@ -147,11 +152,45 @@ class BluetoothHandler {
     List<BluetoothService> services = await _device!.discoverServices();
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
-        if (characteristic.properties.read) {
+        if (characteristic.properties.read &&
+            characteristic.serviceUuid.toString() == thalesSeriviceUUID) {
           List<int> value = await characteristic.read();
-          print(value);
+          String resultString = String.fromCharCodes(value);
+          print(resultString);
         }
       }
+    }
+  }
+
+  Future<void> subscribe({void Function(String)? callback}) async {
+    List<BluetoothService> services = await _device!.discoverServices();
+    for (BluetoothService service in services) {
+      for (BluetoothCharacteristic characteristic in service.characteristics) {
+        if (characteristic.properties.notify &&
+            characteristic.serviceUuid.toString() == thalesSeriviceUUID) {
+          // create a subscription
+          _subscription = characteristic.onValueReceived.listen((value) {
+            // convert to string
+            String resultString = String.fromCharCodes(value);
+            // add to data
+            bluetoothData.add(resultString);
+            if (bluetoothData.length > 20) {
+              bluetoothData.removeAt(0);
+            }
+            // call callback if defined
+            if (callback != null) {
+              callback(resultString);
+            }
+          });
+        }
+      }
+    }
+  }
+
+  void disposeStream() {
+    if (_subscription != null) {
+      _subscription!.cancel();
+      _subscription = null;
     }
   }
 }
