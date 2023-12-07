@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:convert';
@@ -40,6 +41,7 @@ class BluetoothHandler {
     if (subscription != null) {
       await stopScanning();
     }
+    print("Starting Scan...");
     try {
       // android is slow when asking for all advertisments,
       // so instead we only ask for 1/8 of them
@@ -56,9 +58,9 @@ class BluetoothHandler {
       for (ScanResult result in results) {
         if (result.device.platformName == "ESP32 Thales") {
           await connectToDevice(result.device);
-          print("Thales connected");
-          print(result);
+          // print(result);
           await stopScanning();
+          break;
         }
       }
     });
@@ -104,14 +106,36 @@ class BluetoothHandler {
       print('Error: No device connected');
       return;
     }
-    print("Sending data" + data);
+    print("Sending data: $data");
     List<BluetoothService> services = await _device!.discoverServices();
-    for (BluetoothService service in services) {
-      for (BluetoothCharacteristic characteristic in service.characteristics) {
-        await characteristic.write(utf8.encode(data));
+    bool wasSent = false;
+    try {
+      for (BluetoothService service in services) {
+        for (BluetoothCharacteristic characteristic
+            in service.characteristics) {
+          print(characteristic.serviceUuid.toString());
+
+          if (characteristic.properties.write &&
+              characteristic.serviceUuid.toString() ==
+                  "af97994f-4d78-457e-8e10-05dd0ce6f680") {
+            print("Sending to ${characteristic.characteristicUuid}");
+            String readyData = "$data\r\n";
+            await characteristic.write(Uint8List.fromList(readyData.codeUnits));
+            wasSent = true;
+          }
+        }
       }
+      if (!wasSent) {
+        print("Could not send the data");
+      }
+    } on FlutterBluePlusException catch (e) {
+      print("Flutter Blue Plus Exception");
+      print(e.toString());
+      print(e.description);
+    } catch (e) {
+      print("Something is weird");
+      print(e);
     }
-    print("Bluetooth peripheral not found");
   }
 
   Future<void> receiveData() async {
