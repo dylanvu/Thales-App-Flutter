@@ -155,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        widget.bluetoothHandler.sendData("hello");
+                        widget.bluetoothHandler.sendData("1");
                       },
                       child: const Text("BLE command"),
                     ),
