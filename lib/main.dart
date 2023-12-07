@@ -147,6 +147,18 @@ class _MyHomePageState extends State<MyHomePage> {
                         return const Text("No data available");
                       }
                     }),
+                    ElevatedButton(
+                      onPressed: () {
+                        widget.bluetoothHandler.startScanning();
+                      },
+                      child: const Text("connect BLE"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        widget.bluetoothHandler.sendData("hello");
+                      },
+                      child: const Text("BLE command"),
+                    ),
                   ],
                 ),
               ],
