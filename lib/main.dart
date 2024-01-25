@@ -55,7 +55,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool switchPressed = false;
+  String newestData = "None";
 
   Future<void> initBluetooth(BluetoothHandler bluetoothHandler) async {
     await bluetoothHandler.startBluetooth();
@@ -66,6 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     initBluetooth(context.read<BluetoothHandler>());
+  }
+
+  void setNewestData(String newData) {
+    setState(() {
+      newestData = newData;
+    });
   }
 
   @override
@@ -147,15 +153,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     //     return const Text("No data available");
                     //   }
                     // }),
+                    // BluetoothSubscriber(callback: setNewestData),
                     ElevatedButton(
                       onPressed: () {
                         context.read<BluetoothHandler>().startScanning();
                       },
                       child: const Text("Connect to BLE"),
                     ),
+                    ElevatedButton(
+                      onPressed: () {
+                        context
+                            .read<BluetoothHandler>()
+                            .subscribe(callback: setNewestData);
+                      },
+                      child: const Text("Subscribe"),
+                    ),
                     Consumer<BluetoothHandler>(
                         builder: (context, bluetoothHandler, child) {
-                      print("notify");
                       if (bluetoothHandler.device != null) {
                         return Text(
                             "Connected to: ${bluetoothHandler.device!.platformName}");
@@ -163,6 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         return const Text("No BLE yet");
                       }
                     }),
+                    Text("Newest Data: $newestData"),
                     ElevatedButton(
                       onPressed: () {
                         context.read<BluetoothHandler>().sendData("1");

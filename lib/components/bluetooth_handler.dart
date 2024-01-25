@@ -169,12 +169,18 @@ class BluetoothHandler extends ChangeNotifier {
   }
 
   Future<void> subscribe({void Function(String)? callback}) async {
+    if (_subscription != null) {
+      print("Disposing of old subscription");
+      disposeStream();
+      notifyListeners();
+    }
     List<BluetoothService> services = await device!.discoverServices();
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
         if (characteristic.properties.notify &&
             characteristic.serviceUuid.toString() == thalesSeriviceUUID) {
           // create a subscription
+          print("Creating subscription now");
           _subscription = characteristic.onValueReceived.listen((value) {
             // convert to string
             String resultString = String.fromCharCodes(value);
@@ -188,7 +194,13 @@ class BluetoothHandler extends ChangeNotifier {
             if (callback != null) {
               callback(resultString);
             }
+            notifyListeners();
           });
+          // now actually subscribe
+          await characteristic.setNotifyValue(true);
+          notifyListeners();
+// cleanup: cancel subscription when disconnected
+          // device!.cancelWhenDisconnected(_subscription);
         }
       }
     }
@@ -211,9 +223,9 @@ class BluetoothSubscriber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<BluetoothHandler>(
-      builder: (context, usbHandler, child) {
+      builder: (context, bluetoothHandler, child) {
         // subscribe here
-        usbHandler.subscribe(callback: callback);
+        bluetoothHandler.subscribe(callback: callback);
         return const SizedBox.shrink();
       },
     );
