@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:thales_wellness/usb_debugger/usb_debug_monitor.dart';
 import 'components/custom_icon_with_button.dart';
 import 'components/bluetooth_handler.dart';
-import 'components/usb_handler.dart';
 
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => USBHandler(),
+      create: (context) => BluetoothHandler(),
       child: const MyApp(),
     ),
   );
@@ -24,17 +22,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  BluetoothHandler bluetoothHandler = BluetoothHandler();
-
   @override
   void initState() {
     super.initState();
-    initBluetooth();
-  }
-
-  Future<void> initBluetooth() async {
-    await bluetoothHandler.startBluetooth();
-    await bluetoothHandler.startScanning();
   }
 
   @override
@@ -47,20 +37,18 @@ class _MyAppState extends State<MyApp> {
           background: const Color(0xFF4F5357),
         ), // Color Scheme
       ),
-      home: MyHomePage(
+      home: const MyHomePage(
         title: 'Wellness Home Page',
-        bluetoothHandler: bluetoothHandler,
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title, required this.bluetoothHandler})
-      : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
-  BluetoothHandler bluetoothHandler;
+  // BluetoothHandler bluetoothHandler;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -68,6 +56,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool switchPressed = false;
+
+  Future<void> initBluetooth(BluetoothHandler bluetoothHandler) async {
+    await bluetoothHandler.startBluetooth();
+    await bluetoothHandler.startScanning();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initBluetooth(context.read<BluetoothHandler>());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,44 +117,55 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Column(
                   children: [
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Navigator.of(context).push(
+                    //       MaterialPageRoute(
+                    //         builder: (context) => USBDebugMonitorPage(
+                    //           title: "USB Debug Monitor Page",
+                    //           usbHandler: context.read<USBHandler>(),
+                    //           bluetoothHandler: widget.bluetoothHandler,
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Consumer<USBHandler>(
+                    //     builder: (context, usbHandler, child) => Text(
+                    //         usbHandler.currentlyConnectedDevice == null
+                    //             ? "no device"
+                    //             : "device connected"),
+                    //   ),
+                    // ),
+                    // subscribe to the stream
+                    // USBSubscriber(),
+                    // Consumer<USBHandler>(builder: (context, usbHandler, child) {
+                    //   if (usbHandler.serialData.isNotEmpty) {
+                    //     return Text(
+                    //       "Newest data: \"${usbHandler.serialData.last}\"",
+                    //     );
+                    //   } else {
+                    //     return const Text("No data available");
+                    //   }
+                    // }),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => USBDebugMonitorPage(
-                              title: "USB Debug Monitor Page",
-                              usbHandler: context.read<USBHandler>(),
-                            ),
-                          ),
-                        );
+                        context.read<BluetoothHandler>().startScanning();
                       },
-                      child: Consumer<USBHandler>(
-                        builder: (context, usbHandler, child) => Text(
-                            usbHandler.currentlyConnectedDevice == null
-                                ? "no device"
-                                : "device connected"),
-                      ),
+                      child: const Text("Connect to BLE"),
                     ),
-                    // subscribe to the stream
-                    USBSubscriber(),
-                    Consumer<USBHandler>(builder: (context, usbHandler, child) {
-                      if (usbHandler.serialData.isNotEmpty) {
+                    Consumer<BluetoothHandler>(
+                        builder: (context, bluetoothHandler, child) {
+                      print("notify");
+                      if (bluetoothHandler.device != null) {
                         return Text(
-                          "Newest data: \"${usbHandler.serialData.last}\"",
-                        );
+                            "Connected to: ${bluetoothHandler.device!.platformName}");
                       } else {
-                        return const Text("No data available");
+                        return const Text("No BLE yet");
                       }
                     }),
                     ElevatedButton(
                       onPressed: () {
-                        widget.bluetoothHandler.startScanning();
-                      },
-                      child: const Text("connect BLE"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        widget.bluetoothHandler.sendData("1");
+                        context.read<BluetoothHandler>().sendData("1");
                       },
                       child: const Text("BLE command"),
                     ),

@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:thales_wellness/components/bluetooth_handler.dart';
 import 'package:thales_wellness/components/usb_handler.dart';
 import 'package:usb_serial/transaction.dart';
 import 'package:usb_serial/usb_serial.dart';
+
+import "../components/bluetooth_handler.dart";
 
 class USBDebugMonitorPage extends StatefulWidget {
   final String title;
@@ -14,10 +17,13 @@ class USBDebugMonitorPage extends StatefulWidget {
     Key? key,
     required this.title,
     required this.usbHandler,
+    required this.bluetoothHandler,
   }) : super(key: key);
 
   @override
   _USBDebugMonitorPageState createState() => _USBDebugMonitorPageState();
+
+  BluetoothHandler bluetoothHandler;
 }
 
 class _USBDebugMonitorPageState extends State<USBDebugMonitorPage> {
@@ -25,6 +31,7 @@ class _USBDebugMonitorPageState extends State<USBDebugMonitorPage> {
   String _status = "Idle";
   List<Widget> _ports = [];
   List<Widget> _serialData = [];
+  List<Widget> _bluetoothData = [];
 
   StreamSubscription<String>? _subscription;
   Transaction<String>? _transaction;
@@ -37,6 +44,15 @@ class _USBDebugMonitorPageState extends State<USBDebugMonitorPage> {
       _serialData.add(Text(newData));
       if (_serialData.length > 20) {
         _serialData.removeAt(0);
+      }
+    });
+  }
+
+  void updateBluetoothData(String newData) {
+    setState(() {
+      _bluetoothData.add(Text(newData));
+      if (_bluetoothData.length > 20) {
+        _bluetoothData.removeAt(0);
       }
     });
   }
@@ -151,39 +167,53 @@ class _USBDebugMonitorPageState extends State<USBDebugMonitorPage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            Text(
-                _ports.length > 0
-                    ? "Available Serial Ports"
-                    : "No serial devices available",
-                style: Theme.of(context).textTheme.titleLarge),
-            ..._ports,
-            Text('Status: $_status\n'),
-            Text('info: ${_port.toString()}\n'),
-            ListTile(
-              title: TextField(
-                controller: _textController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Text To Send',
-                ),
-              ),
-              trailing: ElevatedButton(
-                onPressed: _port == null
-                    ? null
-                    : () async {
-                        if (_port == null) {
-                          return;
-                        }
-                        String data = "${_textController.text}\r\n";
-                        // await _port!.write(Uint8List.fromList(data.codeUnits));
-                        await _port!.write(Uint8List.fromList(data.codeUnits));
-                        _textController.text = "";
-                      },
-                child: const Text("Send"),
-              ),
+            ElevatedButton(
+              onPressed: () {
+                widget.bluetoothHandler.startScanning();
+              },
+              child: const Text("connect BLE"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                widget.bluetoothHandler.sendData("1");
+              },
+              child: const Text("BLE command"),
             ),
             Text("Result Data", style: Theme.of(context).textTheme.titleLarge),
             ..._serialData,
+            // Text(
+            //     _ports.length > 0
+            //         ? "Available Serial Ports"
+            //         : "No serial devices available",
+            //     style: Theme.of(context).textTheme.titleLarge),
+            // ..._ports,
+            // Text('Status: $_status\n'),
+            // Text('info: ${_port.toString()}\n'),
+            // ListTile(
+            //   title: TextField(
+            //     controller: _textController,
+            //     decoration: const InputDecoration(
+            //       border: OutlineInputBorder(),
+            //       labelText: 'Text To Send',
+            //     ),
+            //   ),
+            //   trailing: ElevatedButton(
+            //     onPressed: _port == null
+            //         ? null
+            //         : () async {
+            //             if (_port == null) {
+            //               return;
+            //             }
+            //             String data = "${_textController.text}\r\n";
+            //             // await _port!.write(Uint8List.fromList(data.codeUnits));
+            //             await _port!.write(Uint8List.fromList(data.codeUnits));
+            //             _textController.text = "";
+            //           },
+            //     child: const Text("Send"),
+            //   ),
+            // ),
+            // Text("Result Data", style: Theme.of(context).textTheme.titleLarge),
+            // ..._serialData,
           ],
         ),
       ),

@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:convert';
 
-class BluetoothHandler {
-  BluetoothDevice? _device;
+import 'package:provider/provider.dart';
+
+class BluetoothHandler extends ChangeNotifier {
+  BluetoothDevice? device;
   StreamSubscription<List<ScanResult>>? subscription;
   String thalesSeriviceUUID = "af97994f-4d78-457e-8e10-05dd0ce6f680";
   List<String> bluetoothData = [];
@@ -89,31 +92,34 @@ class BluetoothHandler {
     print(devices);
   }
 
-  Future<void> connectToDevice(BluetoothDevice device) async {
-    _device = device;
-    if (_device != null) {
-      await _device!.connect();
-      print('Connected to ${_device!.platformName}');
+  Future<void> connectToDevice(BluetoothDevice newDevice) async {
+    device = newDevice;
+    if (device != null) {
+      await device!.connect();
+      print('Connected to ${device!.platformName}');
+      device = newDevice;
+      notifyListeners();
+      print("done notify");
     }
   }
 
   Future<void> disconnectDevice(BluetoothDevice device) async {
-    if (_device != null) {
+    if (device != null) {
       // cancel the stream
-      print('Disconnecting from ${_device!.platformName}');
+      print('Disconnecting from ${device!.platformName}');
       disposeStream();
-      await _device!.disconnect();
-      _device == null;
+      await device!.disconnect();
+      device == null;
     }
   }
 
   Future<void> sendData(String data) async {
-    if (_device == null) {
+    if (device == null) {
       print('Error: No device connected');
       return;
     }
     print("Sending data: $data");
-    List<BluetoothService> services = await _device!.discoverServices();
+    List<BluetoothService> services = await device!.discoverServices();
     bool wasSent = false;
     try {
       for (BluetoothService service in services) {
@@ -144,12 +150,12 @@ class BluetoothHandler {
   }
 
   Future<void> receiveData() async {
-    if (_device == null) {
+    if (device == null) {
       print('Error: No device connected');
       return;
     }
 
-    List<BluetoothService> services = await _device!.discoverServices();
+    List<BluetoothService> services = await device!.discoverServices();
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
         if (characteristic.properties.read &&
@@ -163,7 +169,7 @@ class BluetoothHandler {
   }
 
   Future<void> subscribe({void Function(String)? callback}) async {
-    List<BluetoothService> services = await _device!.discoverServices();
+    List<BluetoothService> services = await device!.discoverServices();
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
         if (characteristic.properties.notify &&
@@ -172,6 +178,7 @@ class BluetoothHandler {
           _subscription = characteristic.onValueReceived.listen((value) {
             // convert to string
             String resultString = String.fromCharCodes(value);
+            print(resultString);
             // add to data
             bluetoothData.add(resultString);
             if (bluetoothData.length > 20) {
@@ -192,5 +199,23 @@ class BluetoothHandler {
       _subscription!.cancel();
       _subscription = null;
     }
+  }
+}
+
+/// this widget is used solely to subscribe to the stream
+class BluetoothSubscriber extends StatelessWidget {
+  void Function(String)? callback;
+
+  BluetoothSubscriber({super.key, this.callback});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<BluetoothHandler>(
+      builder: (context, usbHandler, child) {
+        // subscribe here
+        usbHandler.subscribe(callback: callback);
+        return const SizedBox.shrink();
+      },
+    );
   }
 }
