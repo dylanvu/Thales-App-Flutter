@@ -20,6 +20,8 @@ class _SensorGraphState extends State<SensorGraph> {
       plotAreaBorderColor: Colors.white,
       plotAreaBorderWidth: 5,
       primaryXAxis: CategoryAxis(
+        minimum: 0,
+        maximum: 50,
         axisLine: const AxisLine(color: Colors.white, width: 3),
         majorGridLines: const MajorGridLines(color: Colors.white),
         labelStyle: const TextStyle(color: Colors.white, fontSize: 15),

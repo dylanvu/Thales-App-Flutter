@@ -96,7 +96,7 @@ class _DataPageState extends State<DataPage> {
                 Consumer<BluetoothHandler>(
                     builder: (context, bluetoothHandler, child) {
                   List<GraphData> sensorData =
-                      bluetoothHandler.serialDataToGraphData();
+                      bluetoothHandler.bluetoothDataToGraphData(widget.dataKey);
                   // cap the amount of data
                   if (sensorData.length > 20) {
                     sensorData.removeAt(0);
@@ -112,7 +112,7 @@ class _DataPageState extends State<DataPage> {
                       builder: (context, bluetoothHandler, child) {
                         // parse for the average
                         List<GraphData> sensorData =
-                            bluetoothHandler.serialDataToGraphData();
+                            bluetoothHandler.bluetoothDataToGraphData(widget.dataKey);
                         // cap the amount of data
                         if (sensorData.length > 20) {
                           sensorData.removeAt(0);

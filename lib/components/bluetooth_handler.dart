@@ -214,21 +214,27 @@ class BluetoothHandler extends ChangeNotifier {
     }
   }
 
-  List<GraphData> bluetoothDataToGraphData() {
+  List<GraphData> bluetoothDataToGraphData(String dataKey) {
     List<GraphData> sensorData = [];
-    Map<String, double> bluetoothDataJSON; 
+    Map<String, dynamic> bluetoothDataJSON = {}; 
+    //List<Map<String, dynamic>> bluetoothDataList = [];
+    int count = 0;
+    double value;
+
     for (String entry in bluetoothData) {
       bluetoothDataJSON = jsonDecode(entry);
-      
-      /*
-      if (entry.contains("*")) {
-        List<String> split = entry.split("*");
-        sensorData.add(
-            GraphData('${double.parse(split[1])} sec', double.parse(split[0])));
-      } else {
-        sensorData
-            .add(GraphData('${double.parse(entry)} sec', double.parse(entry)));
-      }*/
+      //bluetoothDataList.add(bluetoothDataJSON);
+
+      //count = bluetoothData.indexOf(entry);
+      //I was gonna use this code but then it's like stuck around 0 and 1s
+      //Is the string array constantly resetting? or I'm probably doing smth wrong
+      //also is the array stuck at like 20 lol
+      //but anyways current code kinda works, hopefully this is what u need
+      //btw I also changed the max of the x axis to 50 just to check
+      count += 1;
+      value = bluetoothDataJSON[dataKey];
+
+      sensorData.add(GraphData(count.toString(), value));
     }
     return sensorData;
   }
