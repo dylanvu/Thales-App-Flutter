@@ -64,9 +64,9 @@ class BluetoothHandler extends ChangeNotifier {
     FlutterBluePlus.scanResults.listen((results) async {
       for (ScanResult result in results) {
         if (result.device.platformName == "ESP32 Thales") {
+          await stopScanning();
           await connectToDevice(result.device);
           // print(result);
-          await stopScanning();
           break;
         }
       }
