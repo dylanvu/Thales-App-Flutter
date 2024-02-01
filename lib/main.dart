@@ -104,22 +104,26 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: FontAwesomeIcons.heartPulse,
                   color: const Color(0xFFD54E4E),
                   text: "Heart Rate Monitor",
+                  dataKey: "heart_rate",
                 ),
                 CustomIconWithButton(
                   icon: Icons.show_chart,
                   color: const Color.fromARGB(255, 163, 78, 213),
                   text: "Stress Level Monitor",
                   interactive: true,
+                  dataKey: "stress",
                 ),
                 CustomIconWithButton(
                   icon: Icons.water_drop,
                   color: const Color(0xFF7E99C3),
                   text: "Hydration Sensor",
+                  dataKey: "hydration",
                 ),
                 CustomIconWithButton(
                   icon: Icons.thermostat,
                   color: const Color(0xFF639269),
                   text: "Body Temp Monitor",
+                  dataKey: "temperature",
                 ),
                 Column(
                   children: [
