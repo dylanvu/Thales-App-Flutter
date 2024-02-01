@@ -127,37 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Column(
                   children: [
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     Navigator.of(context).push(
-                    //       MaterialPageRoute(
-                    //         builder: (context) => USBDebugMonitorPage(
-                    //           title: "USB Debug Monitor Page",
-                    //           usbHandler: context.read<USBHandler>(),
-                    //           bluetoothHandler: widget.bluetoothHandler,
-                    //         ),
-                    //       ),
-                    //     );
-                    //   },
-                    //   child: Consumer<USBHandler>(
-                    //     builder: (context, usbHandler, child) => Text(
-                    //         usbHandler.currentlyConnectedDevice == null
-                    //             ? "no device"
-                    //             : "device connected"),
-                    //   ),
-                    // ),
-                    // subscribe to the stream
-                    // USBSubscriber(),
-                    // Consumer<USBHandler>(builder: (context, usbHandler, child) {
-                    //   if (usbHandler.serialData.isNotEmpty) {
-                    //     return Text(
-                    //       "Newest data: \"${usbHandler.serialData.last}\"",
-                    //     );
-                    //   } else {
-                    //     return const Text("No data available");
-                    //   }
-                    // }),
-                    // BluetoothSubscriber(callback: setNewestData),
                     ElevatedButton(
                       onPressed: () {
                         context.read<BluetoothHandler>().startScanning();

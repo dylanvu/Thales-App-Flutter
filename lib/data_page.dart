@@ -97,10 +97,6 @@ class _DataPageState extends State<DataPage> {
                     builder: (context, bluetoothHandler, child) {
                   List<GraphData> sensorData =
                       bluetoothHandler.bluetoothDataToGraphData(widget.dataKey);
-                  // cap the amount of data
-                  if (sensorData.length > 20) {
-                    sensorData.removeAt(0);
-                  }
                   return SensorGraph(
                       title: widget.title, sensorData: sensorData);
                 }),
@@ -111,12 +107,8 @@ class _DataPageState extends State<DataPage> {
                     Consumer<BluetoothHandler>(
                       builder: (context, bluetoothHandler, child) {
                         // parse for the average
-                        List<GraphData> sensorData =
-                            bluetoothHandler.bluetoothDataToGraphData(widget.dataKey);
-                        // cap the amount of data
-                        if (sensorData.length > 20) {
-                          sensorData.removeAt(0);
-                        }
+                        List<GraphData> sensorData = bluetoothHandler
+                            .bluetoothDataToGraphData(widget.dataKey);
                         return Text(
                           'Current: ${bluetoothHandler.bluetoothData.isEmpty ? "None" : sensorData.last.y}\nAverage: ${calculateAverage(sensorData).toStringAsFixed(2)}',
                           style: const TextStyle(

@@ -17,6 +17,8 @@ class BluetoothHandler extends ChangeNotifier {
 
   StreamSubscription<List<int>>? _subscription;
 
+  int bluetoothDataMax = 50;
+
   Future<void> startBluetooth() async {
     // first, check if bluetooth is supported by your hardware
     // Note: The platform is initialized on the first call to any FlutterBluePlus method.
@@ -188,7 +190,7 @@ class BluetoothHandler extends ChangeNotifier {
             print(resultString);
             // add to data
             bluetoothData.add(resultString);
-            if (bluetoothData.length > 20) {
+            if (bluetoothData.length > bluetoothDataMax) {
               bluetoothData.removeAt(0);
             }
             // call callback if defined
@@ -216,7 +218,7 @@ class BluetoothHandler extends ChangeNotifier {
 
   List<GraphData> bluetoothDataToGraphData(String dataKey) {
     List<GraphData> sensorData = [];
-    Map<String, dynamic> bluetoothDataJSON = {}; 
+    Map<String, dynamic> bluetoothDataJSON = {};
     //List<Map<String, dynamic>> bluetoothDataList = [];
     int count = 0;
     double value;
@@ -241,19 +243,34 @@ class BluetoothHandler extends ChangeNotifier {
 }
 
 /// this widget is used solely to subscribe to the stream
-class BluetoothSubscriber extends StatelessWidget {
+
+class BluetoothSubscriber extends StatefulWidget {
   void Function(String)? callback;
 
   BluetoothSubscriber({super.key, this.callback});
 
   @override
+  State<BluetoothSubscriber> createState() => _BluetoothSubscriberState();
+}
+
+class _BluetoothSubscriberState extends State<BluetoothSubscriber> {
+  @override
+  void initState() {
+    super.initState();
+    // subscribe
+    context.read<BluetoothHandler>().subscribe(callback: widget.callback);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // unsubscribe
+    print("dispose unsubscribe");
+    context.read<BluetoothHandler>().disposeStream();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<BluetoothHandler>(
-      builder: (context, bluetoothHandler, child) {
-        // subscribe here
-        bluetoothHandler.subscribe(callback: callback);
-        return const SizedBox.shrink();
-      },
-    );
+    return const SizedBox.shrink();
   }
 }
