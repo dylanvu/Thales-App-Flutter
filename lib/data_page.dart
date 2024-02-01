@@ -1,5 +1,6 @@
 /* Page to show while looking for device */
 
+import 'package:thales_wellness/components/bluetooth_handler.dart';
 import 'package:thales_wellness/components/sensor_graph.dart';
 import 'package:flutter/material.dart';
 import 'components/usb_handler.dart';
@@ -49,15 +50,16 @@ class _DataPageState extends State<DataPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            USBSubscriber(),
-            Consumer<USBHandler>(builder: (context, usbHandler, child) {
-              if (usbHandler.serialData.isNotEmpty) {
+            BluetoothSubscriber(),
+            Consumer<BluetoothHandler>(
+                builder: (context, bluetoothHandler, child) {
+              if (bluetoothHandler.bluetoothData.isNotEmpty) {
                 // Future.delayed(Duration.zero, () async {
-                //   addSensorData(usbHandler.serialData.last);
+                //   addSensorData(bluetoothHandler.bluetoothData.last);
                 // });
 
                 return Text(
-                  "Newest data: \"${usbHandler.serialData.last}\"",
+                  "Newest data: \"${bluetoothHandler.bluetoothData.last}\"",
                   style: const TextStyle(
                     fontSize: 15,
                     color: Colors.white,
@@ -88,9 +90,10 @@ class _DataPageState extends State<DataPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Consumer<USBHandler>(builder: (context, usbHandler, child) {
+                Consumer<BluetoothHandler>(
+                    builder: (context, bluetoothHandler, child) {
                   List<GraphData> sensorData =
-                      usbHandler.serialDataToGraphData();
+                      bluetoothHandler.serialDataToGraphData();
                   // cap the amount of data
                   if (sensorData.length > 20) {
                     sensorData.removeAt(0);
@@ -102,17 +105,17 @@ class _DataPageState extends State<DataPage> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Consumer<USBHandler>(
-                      builder: (context, usbHandler, child) {
+                    Consumer<BluetoothHandler>(
+                      builder: (context, bluetoothHandler, child) {
                         // parse for the average
                         List<GraphData> sensorData =
-                            usbHandler.serialDataToGraphData();
+                            bluetoothHandler.serialDataToGraphData();
                         // cap the amount of data
                         if (sensorData.length > 20) {
                           sensorData.removeAt(0);
                         }
                         return Text(
-                          'Current: ${usbHandler.serialData.isEmpty ? "None" : sensorData.last.y}\nAverage: ${calculateAverage(sensorData).toStringAsFixed(2)}',
+                          'Current: ${bluetoothHandler.bluetoothData.isEmpty ? "None" : sensorData.last.y}\nAverage: ${calculateAverage(sensorData).toStringAsFixed(2)}',
                           style: const TextStyle(
                             fontSize: 25,
                             color: Colors.white,
