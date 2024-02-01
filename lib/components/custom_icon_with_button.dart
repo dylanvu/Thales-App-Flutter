@@ -7,6 +7,7 @@ class CustomIconWithButton extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.text,
+    required this.dataKey,
     this.interactive = false,
   });
 
@@ -14,6 +15,8 @@ class CustomIconWithButton extends StatelessWidget {
   Color color;
   String text;
   bool interactive;
+  // dataKey is the key to access the incoming data in the JSON format
+  String dataKey;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,7 @@ class CustomIconWithButton extends StatelessWidget {
             color: color,
             title: text,
             interactive: interactive,
+            dataKey: dataKey,
           ),
         ),
       );

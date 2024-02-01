@@ -12,6 +12,7 @@ class DataPage extends StatefulWidget {
       required this.icon,
       required this.color,
       required this.title,
+      required this.dataKey,
       this.interactive = false})
       : super(key: key);
 
@@ -19,6 +20,8 @@ class DataPage extends StatefulWidget {
   final Color color;
   final IconData icon;
   bool interactive;
+  // key to access the data in the JSON
+  final String dataKey;
 
   @override
   State<DataPage> createState() => _DataPageState();
