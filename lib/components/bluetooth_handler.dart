@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:convert';
+import 'package:thales_wellness/components/sensor_graph.dart';
 
 import 'package:provider/provider.dart';
 
@@ -211,6 +212,25 @@ class BluetoothHandler extends ChangeNotifier {
       _subscription!.cancel();
       _subscription = null;
     }
+  }
+
+  List<GraphData> bluetoothDataToGraphData() {
+    List<GraphData> sensorData = [];
+    Map<String, double> bluetoothDataJSON; 
+    for (String entry in bluetoothData) {
+      bluetoothDataJSON = jsonDecode(entry);
+      
+      /*
+      if (entry.contains("*")) {
+        List<String> split = entry.split("*");
+        sensorData.add(
+            GraphData('${double.parse(split[1])} sec', double.parse(split[0])));
+      } else {
+        sensorData
+            .add(GraphData('${double.parse(entry)} sec', double.parse(entry)));
+      }*/
+    }
+    return sensorData;
   }
 }
 
