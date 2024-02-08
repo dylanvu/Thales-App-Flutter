@@ -122,19 +122,28 @@ class _DataPageState extends State<DataPage> {
                     if (widget.interactive)
                       Column(
                         children: [
-                          Transform.scale(
-                            scale: 2,
-                            alignment: Alignment.center,
-                            child: Switch(
-                              value: switchState,
-                              activeColor: widget.color,
-                              splashRadius: 20,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  switchState = value;
-                                });
-                              },
-                            ),
+                          Consumer<BluetoothHandler>(
+                            builder: (context, bluetoothHandler, child) {
+                              return Transform.scale(
+                                scale: 2,
+                                alignment: Alignment.center,
+                                child: Switch(
+                                  value: switchState,
+                                  activeColor: widget.color,
+                                  splashRadius: 20,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      if (value) {
+                                        bluetoothHandler.sendData("1");
+                                      } else {
+                                        bluetoothHandler.sendData("0");
+                                      }
+                                      switchState = value;
+                                    });
+                                  },
+                                ),
+                              );
+                            },
                           ),
                           const Text(
                             "Activate Destressor Device",
