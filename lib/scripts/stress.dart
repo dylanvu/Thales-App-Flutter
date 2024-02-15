@@ -47,6 +47,28 @@ double calculateRootMeanSquareDifference(List<double> numbers) {
   return rootMeanSquareDifference;
 }
 
+// call this function for stress level calculation based on an array of heart rate data
+String stressLevelCalculation(List<double> numbers){
+  String stressLevel = "NULL";
+
+  int highStressThreshold = 30;
+  int lowStressThreshold = 90;
+
+  double rmssd = calculateRootMeanSquareDifference(numbers);
+
+  if (rmssd <= highStressThreshold){
+    stressLevel = "High";
+  }
+  else if (rmssd >= lowStressThreshold){
+    stressLevel = "Low";
+  }
+  else{
+    stressLevel = "Normal";
+  }
+
+  return stressLevel;
+}
+
 /// this function will take in a list of numbers to generate a new entry from, calculate the new value, then add it to the input list
 /// sourceNumbers: numbers to generate a new value from using numFunct
 /// numFunct: the function used to generate a new value
