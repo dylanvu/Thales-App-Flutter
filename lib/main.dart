@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:thales_wellness/bluetooth_debugger/bluetooth_debug_monitor.dart';
+import 'package:thales_wellness/usb_debugger/usb_debug_monitor.dart';
 import 'components/custom_icon_with_button.dart';
 import 'components/bluetooth_handler.dart';
 
@@ -86,11 +88,24 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         actions: [
           Padding(
-              padding: const EdgeInsets.only(right: 50),
-              child: SizedBox(
-                  width: 350,
-                  height: 350,
-                  child: Image.asset('images/thales_logo_no_background.png')))
+            padding: const EdgeInsets.only(right: 50),
+            child: SizedBox(
+              width: 350,
+              height: 350,
+              // child: Image.asset('images/thales_logo_no_background.png'),
+              child: IconButton(
+                icon: Image.asset('images/thales_logo_no_background.png'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            BluetoothDebugMonitorPage(title: widget.title)),
+                  );
+                },
+              ),
+            ),
+          )
         ],
       ),
       body: Center(
@@ -124,40 +139,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: const Color(0xFF639269),
                   text: "Body Temp Monitor",
                   dataKey: "temperature",
-                ),
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<BluetoothHandler>().startScanning();
-                      },
-                      child: const Text("Connect to BLE"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        context
-                            .read<BluetoothHandler>()
-                            .subscribe(callback: setNewestData);
-                      },
-                      child: const Text("Subscribe"),
-                    ),
-                    Consumer<BluetoothHandler>(
-                        builder: (context, bluetoothHandler, child) {
-                      if (bluetoothHandler.device != null) {
-                        return Text(
-                            "Connected to: ${bluetoothHandler.device!.platformName}");
-                      } else {
-                        return const Text("No BLE yet");
-                      }
-                    }),
-                    Text("Newest Data: $newestData"),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<BluetoothHandler>().sendData("1");
-                      },
-                      child: const Text("BLE command"),
-                    ),
-                  ],
                 ),
               ],
             ),
