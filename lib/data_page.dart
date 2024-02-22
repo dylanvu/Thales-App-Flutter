@@ -53,26 +53,6 @@ class _DataPageState extends State<DataPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             BluetoothSubscriber(),
-            Consumer<BluetoothHandler>(
-                builder: (context, bluetoothHandler, child) {
-              if (bluetoothHandler.bluetoothData.isNotEmpty) {
-                // return Text(
-                //   "Newest data: \"${bluetoothHandler.bluetoothData.last}\"",
-                //   style: const TextStyle(
-                //     fontSize: 15,
-                //     color: Colors.white,
-                //   ),
-                // );
-              } else {
-                return const Text(
-                  "No data available",
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white,
-                  ),
-                );
-              }
-            }),
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
