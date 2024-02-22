@@ -195,20 +195,30 @@ class BluetoothHandler extends ChangeNotifier {
             // add new entries: RMSSD and stress level
             // grab all the heart rates
             List<double> heartRates = [];
+            bool validStressLevel = true;
             for (String entry in bluetoothData) {
               Map<String, dynamic> dataJSON = jsonDecode(entry);
-              heartRates.add(dataJSON["heart_rate"]);
+              double heartRate = dataJSON["heart_rate"];
+              if (heartRate > 0) {
+                heartRates.add(heartRate);
+              } else {
+                validStressLevel = false;
+                break;
+              }
             }
-
             double stressValue;
-            StressLevel stressLevel = stressLevelCalculation(heartRates);
-            // map stress level to 0 (low), 1 (normal), and 2 (high)
-            if (stressLevel == StressLevel.HIGH) {
-              stressValue = 2;
-            } else if (stressLevel == StressLevel.LOW) {
-              stressValue = 0;
+            if (validStressLevel && heartRates.isNotEmpty) {
+              StressLevel stressLevel = stressLevelCalculation(heartRates);
+              // map stress level to 0 (low), 1 (normal), and 2 (high)
+              if (stressLevel == StressLevel.HIGH) {
+                stressValue = 2;
+              } else if (stressLevel == StressLevel.LOW) {
+                stressValue = 0;
+              } else {
+                stressValue = 1;
+              }
             } else {
-              stressValue = 1;
+              stressValue = -1;
             }
 
             bluetoothDataJSON["stress"] = stressValue;
@@ -218,6 +228,7 @@ class BluetoothHandler extends ChangeNotifier {
 
             // turn back to a string
             resultString = jsonEncode(bluetoothDataJSON);
+            print(resultString);
             // add to data
             bluetoothData.add(resultString);
             if (bluetoothData.length > bluetoothDataMax) {
