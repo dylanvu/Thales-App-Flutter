@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thales_wellness/bluetooth_debugger/bluetooth_debug_monitor.dart';
-import 'package:thales_wellness/usb_debugger/usb_debug_monitor.dart';
 import 'components/custom_icon_with_button.dart';
 import 'components/bluetooth_handler.dart';
 
