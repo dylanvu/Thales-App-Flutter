@@ -189,6 +189,35 @@ class BluetoothHandler extends ChangeNotifier {
             // convert to string
             String resultString = String.fromCharCodes(value);
             print(resultString);
+            // do additional processing to the string. This is Thales specific code
+            // convert to JSON
+            Map<String, dynamic> bluetoothDataJSON = jsonDecode(resultString);
+            // add new entries: RMSSD and stress level
+            // grab all the heart rates
+            List<double> heartRates = [];
+            for (String entry in bluetoothData) {
+              Map<String, dynamic> dataJSON = jsonDecode(entry);
+              heartRates.add(dataJSON["heart_rate"]);
+            }
+
+            double stressValue;
+            StressLevel stressLevel = stressLevelCalculation(heartRates);
+            // map stress level to 0 (low), 1 (normal), and 2 (high)
+            if (stressLevel == StressLevel.HIGH) {
+              stressValue = 2;
+            } else if (stressLevel == StressLevel.LOW) {
+              stressValue = 0;
+            } else {
+              stressValue = 1;
+            }
+
+            bluetoothDataJSON["stress"] = stressValue;
+
+            // TODO: calculate RMSSD and add it
+            bluetoothDataJSON["rmssd"] = -1;
+
+            // turn back to a string
+            resultString = jsonEncode(bluetoothDataJSON);
             // add to data
             bluetoothData.add(resultString);
             if (bluetoothData.length > bluetoothDataMax) {
@@ -223,7 +252,6 @@ class BluetoothHandler extends ChangeNotifier {
     //List<Map<String, dynamic>> bluetoothDataList = [];
     int count = 0;
     double value;
-    List<double> heartRates = [];
 
     for (String entry in bluetoothData) {
       bluetoothDataJSON = jsonDecode(entry);
@@ -236,24 +264,7 @@ class BluetoothHandler extends ChangeNotifier {
       //but anyways current code kinda works, hopefully this is what u need
       //btw I also changed the max of the x axis to 50 just to check
       count += 1;
-      if (dataKey == "stress") {
-        // pull in the stress algorithm instead
-        // grab the previous heart rates
-        heartRates.add(bluetoothDataJSON["heart_rate"]);
-
-        // put these into the stress level calculation
-        StressLevel stressLevel = stressLevelCalculation(heartRates);
-        // map stress level to 0 (low), 1 (normal), and 2 (high)
-        if (stressLevel == StressLevel.HIGH) {
-          value = 2;
-        } else if (stressLevel == StressLevel.LOW) {
-          value = 0;
-        } else {
-          value = 1;
-        }
-      } else {
-        value = bluetoothDataJSON[dataKey];
-      }
+      value = bluetoothDataJSON[dataKey];
       sensorData.add(GraphData(count.toString(), value));
     }
     return sensorData;
