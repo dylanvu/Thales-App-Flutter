@@ -236,7 +236,6 @@ class BluetoothHandler extends ChangeNotifier {
       //but anyways current code kinda works, hopefully this is what u need
       //btw I also changed the max of the x axis to 50 just to check
       count += 1;
-      value = bluetoothDataJSON[dataKey];
       if (dataKey == "stress") {
         // pull in the stress algorithm instead
         // grab the previous heart rates
@@ -252,6 +251,8 @@ class BluetoothHandler extends ChangeNotifier {
         } else {
           value = 1;
         }
+      } else {
+        value = bluetoothDataJSON[dataKey];
       }
       sensorData.add(GraphData(count.toString(), value));
     }
