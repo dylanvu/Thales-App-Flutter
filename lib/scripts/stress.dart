@@ -48,22 +48,22 @@ double calculateRootMeanSquareDifference(List<double> numbers) {
 }
 
 // call this function for stress level calculation based on an array of heart rate data
-String stressLevelCalculation(List<double> numbers){
-  String stressLevel = "NULL";
+enum StressLevel { NULL, LOW, NORMAL, HIGH }
+
+StressLevel stressLevelCalculation(List<double> numbers) {
+  StressLevel stressLevel = StressLevel.NULL;
 
   int highStressThreshold = 30;
   int lowStressThreshold = 90;
 
   double rmssd = calculateRootMeanSquareDifference(numbers);
 
-  if (rmssd <= highStressThreshold){
-    stressLevel = "High";
-  }
-  else if (rmssd >= lowStressThreshold){
-    stressLevel = "Low";
-  }
-  else{
-    stressLevel = "Normal";
+  if (rmssd <= highStressThreshold) {
+    stressLevel = StressLevel.HIGH;
+  } else if (rmssd >= lowStressThreshold) {
+    stressLevel = StressLevel.LOW;
+  } else {
+    stressLevel = StressLevel.NORMAL;
   }
 
   return stressLevel;

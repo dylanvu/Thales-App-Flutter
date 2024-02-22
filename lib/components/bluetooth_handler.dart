@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:thales_wellness/components/sensor_graph.dart';
 
 import 'package:provider/provider.dart';
+import 'package:thales_wellness/scripts/stress.dart';
 
 class BluetoothHandler extends ChangeNotifier {
   BluetoothDevice? device;
@@ -222,6 +223,7 @@ class BluetoothHandler extends ChangeNotifier {
     //List<Map<String, dynamic>> bluetoothDataList = [];
     int count = 0;
     double value;
+    List<double> heartRates = [];
 
     for (String entry in bluetoothData) {
       bluetoothDataJSON = jsonDecode(entry);
@@ -235,7 +237,22 @@ class BluetoothHandler extends ChangeNotifier {
       //btw I also changed the max of the x axis to 50 just to check
       count += 1;
       value = bluetoothDataJSON[dataKey];
+      if (dataKey == "stress") {
+        // pull in the stress algorithm instead
+        // grab the previous heart rates
+        heartRates.add(bluetoothDataJSON["heart_rate"]);
 
+        // put these into the stress level calculation
+        StressLevel stressLevel = stressLevelCalculation(heartRates);
+        // map stress level to 0 (low), 1 (normal), and 2 (high)
+        if (stressLevel == StressLevel.HIGH) {
+          value = 2;
+        } else if (stressLevel == StressLevel.LOW) {
+          value = 0;
+        } else {
+          value = 1;
+        }
+      }
       sensorData.add(GraphData(count.toString(), value));
     }
     return sensorData;
