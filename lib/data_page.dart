@@ -3,7 +3,6 @@
 import 'package:thales_wellness/components/bluetooth_handler.dart';
 import 'package:thales_wellness/components/sensor_graph.dart';
 import 'package:flutter/material.dart';
-import 'components/usb_handler.dart';
 import 'package:provider/provider.dart';
 
 class DataPage extends StatefulWidget {
