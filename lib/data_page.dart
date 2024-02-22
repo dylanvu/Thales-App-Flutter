@@ -56,17 +56,13 @@ class _DataPageState extends State<DataPage> {
             Consumer<BluetoothHandler>(
                 builder: (context, bluetoothHandler, child) {
               if (bluetoothHandler.bluetoothData.isNotEmpty) {
-                // Future.delayed(Duration.zero, () async {
-                //   addSensorData(bluetoothHandler.bluetoothData.last);
-                // });
-
-                return Text(
-                  "Newest data: \"${bluetoothHandler.bluetoothData.last}\"",
-                  style: const TextStyle(
-                    fontSize: 15,
-                    color: Colors.white,
-                  ),
-                );
+                // return Text(
+                //   "Newest data: \"${bluetoothHandler.bluetoothData.last}\"",
+                //   style: const TextStyle(
+                //     fontSize: 15,
+                //     color: Colors.white,
+                //   ),
+                // );
               } else {
                 return const Text(
                   "No data available",
