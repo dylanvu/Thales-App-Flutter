@@ -91,7 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               width: 350,
               height: 350,
-              // child: Image.asset('images/thales_logo_no_background.png'),
               child: IconButton(
                 icon: Image.asset('images/thales_logo_no_background.png'),
                 onPressed: () {
@@ -127,12 +126,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   interactive: true,
                   dataKey: "stress",
                 ),
-                CustomIconWithButton(
-                  icon: Icons.water_drop,
-                  color: const Color(0xFF7E99C3),
-                  text: "Hydration Sensor",
-                  dataKey: "hydration",
-                ),
+                // CustomIconWithButton(
+                //   icon: Icons.water_drop,
+                //   color: const Color(0xFF7E99C3),
+                //   text: "Hydration Sensor",
+                //   dataKey: "hydration",
+                // ),
                 CustomIconWithButton(
                   icon: Icons.thermostat,
                   color: const Color(0xFF639269),
