@@ -5,6 +5,7 @@ import 'package:thales_wellness/components/medical_disclaimer.dart';
 import 'package:thales_wellness/components/sensor_graph.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thales_wellness/scripts/stress.dart';
 
 class DataPage extends StatefulWidget {
   const DataPage({
@@ -116,7 +117,7 @@ class _DataPageState extends State<DataPage> {
                         List<GraphData> sensorData = bluetoothHandler
                             .bluetoothDataToGraphData(widget.dataKey);
                         return Text(
-                          'Current: ${bluetoothHandler.bluetoothData.isEmpty || sensorData.last.y == -1 ? "None" : '${sensorData.last.y.toStringAsFixed(0)} $units'}\nAverage: ${'${calculateAverage(sensorData).toStringAsFixed(2)} $units'}',
+                          'Current: ${bluetoothHandler.bluetoothData.isEmpty || sensorData.last.y == -1 ? "None" : widget.dataKey == "stress" ? stressLevelToString[sensorData.last.y.round()] : '${sensorData.last.y.toStringAsFixed(0)} $units'}\nAverage: ${widget.dataKey == "stress" ? stressLevelToString[calculateAverage(sensorData).round()] : '${calculateAverage(sensorData).toStringAsFixed(2)} $units'}',
                           style: const TextStyle(
                             fontSize: 25,
                             color: Colors.white,
@@ -133,7 +134,7 @@ class _DataPageState extends State<DataPage> {
                               List<GraphData> sensorData = bluetoothHandler
                                   .bluetoothDataToGraphData("rmssd");
                               return Text(
-                                'RMSSD: ${bluetoothHandler.bluetoothData.isEmpty ? "None" : sensorData.last.y}',
+                                'RMSSD: ${bluetoothHandler.bluetoothData.isEmpty ? "None" : sensorData.last.y.toStringAsFixed(2)}',
                                 style: const TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,

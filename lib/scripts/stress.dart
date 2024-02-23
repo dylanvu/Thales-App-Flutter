@@ -56,6 +56,8 @@ double calculateRootMeanSquareDifference(List<double> numbers) {
 // call this function for stress level calculation based on an array of heart rate data
 enum StressLevel { NULL, LOW, NORMAL, HIGH }
 
+final List<String> stressLevelToString = ["LOW", "NORMAL", "HIGH"];
+
 class Stress {
   final StressLevel stressLevel;
   final double rmssd;
