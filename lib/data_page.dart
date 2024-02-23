@@ -1,6 +1,7 @@
 /* Page to show while looking for device */
 
 import 'package:thales_wellness/components/bluetooth_handler.dart';
+import 'package:thales_wellness/components/medical_disclaimer.dart';
 import 'package:thales_wellness/components/sensor_graph.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +58,7 @@ class _DataPageState extends State<DataPage> {
       default:
         units = "";
     }
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -122,7 +124,6 @@ class _DataPageState extends State<DataPage> {
                         );
                       },
                     ),
-                    const SizedBox(height: 80),
                     if (widget.interactive)
                       Column(
                         children: [
@@ -140,6 +141,7 @@ class _DataPageState extends State<DataPage> {
                               );
                             },
                           ),
+                          const SizedBox(height: 80),
                           Consumer<BluetoothHandler>(
                             builder: (context, bluetoothHandler, child) {
                               return Transform.scale(
@@ -174,6 +176,8 @@ class _DataPageState extends State<DataPage> {
                           ),
                         ],
                       ),
+                    const SizedBox(height: 40),
+                    const MedicalDisclaimer(),
                   ],
                 ),
               ],
