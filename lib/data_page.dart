@@ -73,7 +73,7 @@ class _DataPageState extends State<DataPage> {
                   List<GraphData> sensorData =
                       bluetoothHandler.bluetoothDataToGraphData(widget.dataKey);
                   return SensorGraph(
-                      title: widget.title, sensorData: sensorData);
+                      title: widget.title, sensorData: sensorData, color: widget.color, dataKey: widget.dataKey);
                 }),
                 const SizedBox(width: 100),
                 Column(

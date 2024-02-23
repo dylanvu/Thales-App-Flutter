@@ -38,10 +38,13 @@ class CustomIconWithButton extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          icon,
-          size: 200,
+        IconButton(
+          icon: Icon(icon),
+          iconSize: 200,
           color: color,
+          onPressed: () {
+            navigateToDataPage();
+          },
         ),
         const SizedBox(
           height: 30,
