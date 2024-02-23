@@ -19,6 +19,7 @@ class BluetoothHandler extends ChangeNotifier {
   StreamSubscription<List<int>>? _subscription;
 
   int bluetoothDataMax = 50;
+  int scanTimeout = 15;
 
   Future<void> startBluetooth() async {
     // first, check if bluetooth is supported by your hardware
@@ -58,7 +59,7 @@ class BluetoothHandler extends ChangeNotifier {
       // so instead we only ask for 1/8 of them
       int divisor = Platform.isAndroid ? 8 : 1;
       await FlutterBluePlus.startScan(
-          timeout: const Duration(seconds: 15),
+          timeout: Duration(seconds: scanTimeout),
           continuousUpdates: true,
           continuousDivisor: divisor);
     } catch (e) {
@@ -101,6 +102,7 @@ class BluetoothHandler extends ChangeNotifier {
   Future<void> connectToDevice(BluetoothDevice newDevice) async {
     device = newDevice;
     if (device != null) {
+      // await device!.connect(autoConnect: true, mtu: null);
       await device!.connect();
       print('Connected to ${device!.platformName}');
       device = newDevice;
@@ -115,6 +117,7 @@ class BluetoothHandler extends ChangeNotifier {
     disposeStream();
     await device.disconnect();
     this.device = null;
+    notifyListeners();
   }
 
   Future<void> sendData(String data) async {
@@ -225,9 +228,9 @@ class BluetoothHandler extends ChangeNotifier {
           });
           // now actually subscribe
           await characteristic.setNotifyValue(true);
-          notifyListeners();
-// cleanup: cancel subscription when disconnected
-          // device!.cancelWhenDisconnected(_subscription);
+          // cleanup: cancel subscription when disconnected
+          // device!.cancelWhenDisconnected(_subscription as StreamSubscription);
+          // notifyListeners();
         }
       }
     }
@@ -280,8 +283,38 @@ class _BluetoothSubscriberState extends State<BluetoothSubscriber> {
   @override
   void initState() {
     super.initState();
-    // subscribe
-    context.read<BluetoothHandler>().subscribe(callback: widget.callback);
+    BluetoothHandler bluetoothHandler = context.read<BluetoothHandler>();
+
+    var disconnectionSubscription = bluetoothHandler.device?.connectionState
+        .listen((BluetoothConnectionState state) async {
+      if (state == BluetoothConnectionState.disconnected) {
+        if (bluetoothHandler.device != null) {
+          bluetoothHandler.disconnectDevice(bluetoothHandler.device!);
+        }
+        // 1. typically, start a periodic timer that tries to
+        //    reconnect, or just call connect() again right now
+        // 2. you must always re-discover services after disconnection!
+        await bluetoothHandler.startScanning();
+        // reconnect and resubscribe
+        Timer.periodic(Duration(seconds: bluetoothHandler.scanTimeout),
+            (timer) async {
+          if (bluetoothHandler.device != null) {
+            timer.cancel();
+            // subscribe now
+            // await bluetoothHandler.subscribe(callback: widget.callback);
+          } else {
+            await bluetoothHandler.startScanning();
+          }
+        });
+      } else if (state == BluetoothConnectionState.connected) {
+        // subscribe
+        bluetoothHandler.subscribe(callback: widget.callback);
+      }
+    });
+
+    // bluetoothHandler.device?.cancelWhenDisconnected(
+    //     disconnectionSubscription as StreamSubscription,
+    //     next: true);
   }
 
   @override
