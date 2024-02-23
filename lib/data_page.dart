@@ -45,6 +45,18 @@ class _DataPageState extends State<DataPage> {
 
   @override
   Widget build(BuildContext context) {
+    // set the units
+    String units = "";
+    switch (widget.dataKey) {
+      case "heart_rate":
+        units = "bpm";
+        break;
+      case "temperature":
+        units = "⁰C";
+        break;
+      default:
+        units = "";
+    }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -102,7 +114,7 @@ class _DataPageState extends State<DataPage> {
                         List<GraphData> sensorData = bluetoothHandler
                             .bluetoothDataToGraphData(widget.dataKey);
                         return Text(
-                          'Current: ${bluetoothHandler.bluetoothData.isEmpty || sensorData.last.y == -1 ? "None" : sensorData.last.y.toStringAsFixed(0)}\nAverage: ${calculateAverage(sensorData).toStringAsFixed(2)}',
+                          'Current: ${bluetoothHandler.bluetoothData.isEmpty || sensorData.last.y == -1 ? "None" : '${sensorData.last.y.toStringAsFixed(0)} $units'}\nAverage: ${'${calculateAverage(sensorData).toStringAsFixed(2)} $units'}',
                           style: const TextStyle(
                             fontSize: 25,
                             color: Colors.white,
