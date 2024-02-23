@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DataPage extends StatefulWidget {
-  DataPage(
-      {Key? key,
-      required this.icon,
-      required this.color,
-      required this.title,
-      required this.dataKey,
-      this.interactive = false})
-      : super(key: key);
+  DataPage({
+    Key? key,
+    required this.icon,
+    required this.color,
+    required this.title,
+    required this.dataKey,
+    this.interactive = false,
+    required this.rememberInteractiveState,
+    required this.interactiveStates,
+  }) : super(key: key);
 
   final String title;
   final Color color;
@@ -22,12 +24,24 @@ class DataPage extends StatefulWidget {
   // key to access the data in the JSON
   final String dataKey;
 
+  Function rememberInteractiveState;
+  Map<String, bool> interactiveStates;
+
   @override
   State<DataPage> createState() => _DataPageState();
 }
 
 class _DataPageState extends State<DataPage> {
   bool switchState = false;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.interactiveStates.containsKey(widget.dataKey)) {
+      setState(() {
+        switchState = widget.interactiveStates[widget.dataKey]!;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +87,10 @@ class _DataPageState extends State<DataPage> {
                   List<GraphData> sensorData =
                       bluetoothHandler.bluetoothDataToGraphData(widget.dataKey);
                   return SensorGraph(
-                      title: widget.title, sensorData: sensorData, color: widget.color, dataKey: widget.dataKey);
+                      title: widget.title,
+                      sensorData: sensorData,
+                      color: widget.color,
+                      dataKey: widget.dataKey);
                 }),
                 const SizedBox(width: 100),
                 Column(
@@ -115,6 +132,8 @@ class _DataPageState extends State<DataPage> {
                                       }
                                       switchState = value;
                                     });
+                                    widget.rememberInteractiveState(
+                                        widget.dataKey, value);
                                   },
                                 ),
                               );

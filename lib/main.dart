@@ -56,23 +56,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String newestData = "None";
-
   Future<void> initBluetooth(BluetoothHandler bluetoothHandler) async {
     await bluetoothHandler.startBluetooth();
     await bluetoothHandler.startScanning();
+  }
+
+  Map<String, bool> interactiveStates = {};
+
+  void rememberInteractiveState(String key, bool value) {
+    setState(() {
+      interactiveStates[key] = value;
+    });
   }
 
   @override
   void initState() {
     super.initState();
     initBluetooth(context.read<BluetoothHandler>());
-  }
-
-  void setNewestData(String newData) {
-    setState(() {
-      newestData = newData;
-    });
   }
 
   @override
@@ -118,6 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: const Color(0xFFD54E4E),
                   text: "Heart Rate Monitor",
                   dataKey: "heart_rate",
+                  interactiveStates: interactiveStates,
+                  rememberInteractiveState: rememberInteractiveState,
                 ),
                 CustomIconWithButton(
                   icon: Icons.show_chart,
@@ -125,6 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   text: "Stress Level Monitor",
                   interactive: true,
                   dataKey: "stress",
+                  interactiveStates: interactiveStates,
+                  rememberInteractiveState: rememberInteractiveState,
                 ),
                 // CustomIconWithButton(
                 //   icon: Icons.water_drop,
@@ -137,6 +141,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: const Color(0xFF639269),
                   text: "Body Temp Monitor",
                   dataKey: "temperature",
+                  interactiveStates: interactiveStates,
+                  rememberInteractiveState: rememberInteractiveState,
                 ),
               ],
             ),
