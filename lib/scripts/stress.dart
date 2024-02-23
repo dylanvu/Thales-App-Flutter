@@ -38,9 +38,13 @@ double calculateRootMeanSquareDifference(List<double> numbers) {
   }
 
   double sumOfSquaredDifferences = 0;
+  double difference = 0;
+  double previousValue = numbers[0];
 
   for (var number in numbers) {
-    sumOfSquaredDifferences += pow(number, 2);
+    difference = (number - previousValue).abs();
+    sumOfSquaredDifferences += pow(difference, 2);
+    previousValue = number;
   }
 
   double rootMeanSquareDifference =
