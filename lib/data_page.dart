@@ -120,7 +120,7 @@ class _DataPageState extends State<DataPage> {
                               List<GraphData> sensorData = bluetoothHandler
                                   .bluetoothDataToGraphData("rmssd");
                               return Text(
-                                'RMSSD: ${bluetoothHandler.bluetoothData.isEmpty ? "None" : sensorData.last.y}\n}',
+                                'RMSSD: ${bluetoothHandler.bluetoothData.isEmpty ? "None" : sensorData.last.y}',
                                 style: const TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,
