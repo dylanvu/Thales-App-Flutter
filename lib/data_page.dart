@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DataPage extends StatefulWidget {
-  DataPage({
+  const DataPage({
     Key? key,
     required this.icon,
     required this.color,
@@ -21,12 +21,12 @@ class DataPage extends StatefulWidget {
   final String title;
   final Color color;
   final IconData icon;
-  bool interactive;
+  final bool interactive;
   // key to access the data in the JSON
   final String dataKey;
 
-  Function rememberInteractiveState;
-  Map<String, bool> interactiveStates;
+  final Function rememberInteractiveState;
+  final Map<String, bool> interactiveStates;
 
   @override
   State<DataPage> createState() => _DataPageState();
