@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 // Higher RMSSD and SDNN values are generally associated with better overall health and greater heart rate variability, which is often seen as a sign of a healthy autonomic nervous system.
 
 double calculateStandardDeviation(List<double> numbers) {
@@ -50,7 +52,14 @@ double calculateRootMeanSquareDifference(List<double> numbers) {
 // call this function for stress level calculation based on an array of heart rate data
 enum StressLevel { NULL, LOW, NORMAL, HIGH }
 
-StressLevel stressLevelCalculation(List<double> numbers) {
+class Stress {
+  final StressLevel stressLevel;
+  final double rmssd;
+
+  Stress(this.stressLevel, this.rmssd);
+}
+
+Stress stressLevelCalculation(List<double> numbers) {
   StressLevel stressLevel = StressLevel.NULL;
 
   int highStressThreshold = 30;
@@ -66,7 +75,7 @@ StressLevel stressLevelCalculation(List<double> numbers) {
     stressLevel = StressLevel.NORMAL;
   }
 
-  return stressLevel;
+  return Stress(stressLevel, rmssd);
 }
 
 /// this function will take in a list of numbers to generate a new entry from, calculate the new value, then add it to the input list

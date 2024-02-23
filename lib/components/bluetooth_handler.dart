@@ -207,8 +207,12 @@ class BluetoothHandler extends ChangeNotifier {
               }
             }
             double stressValue;
+            double rmssd;
             if (validStressLevel && heartRates.isNotEmpty) {
-              StressLevel stressLevel = stressLevelCalculation(heartRates);
+              Stress stress = stressLevelCalculation(heartRates);
+              StressLevel stressLevel = stress.stressLevel;
+              rmssd = stress.rmssd;
+
               // map stress level to 0 (low), 1 (normal), and 2 (high)
               if (stressLevel == StressLevel.HIGH) {
                 stressValue = 2;
@@ -219,12 +223,13 @@ class BluetoothHandler extends ChangeNotifier {
               }
             } else {
               stressValue = -1;
+              rmssd = 0;
             }
 
             bluetoothDataJSON["stress"] = stressValue;
 
             // TODO: calculate RMSSD and add it
-            bluetoothDataJSON["rmssd"] = -1;
+            bluetoothDataJSON["rmssd"] = rmssd;
 
             // turn back to a string
             resultString = jsonEncode(bluetoothDataJSON);

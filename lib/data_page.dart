@@ -99,6 +99,20 @@ class _DataPageState extends State<DataPage> {
                         children: [
                           Consumer<BluetoothHandler>(
                             builder: (context, bluetoothHandler, child) {
+                              // parse for the rmssd value
+                              List<GraphData> sensorData = bluetoothHandler
+                                  .bluetoothDataToGraphData("rmssd");
+                              return Text(
+                                'RMSSD: ${bluetoothHandler.bluetoothData.isEmpty ? "None" : sensorData.last.y}\n}',
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              );
+                            },
+                          ),
+                          Consumer<BluetoothHandler>(
+                            builder: (context, bluetoothHandler, child) {
                               return Transform.scale(
                                 scale: 2,
                                 alignment: Alignment.center,
