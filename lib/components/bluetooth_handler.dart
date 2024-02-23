@@ -70,6 +70,8 @@ class BluetoothHandler extends ChangeNotifier {
         if (result.device.platformName == "ESP32 Thales") {
           await stopScanning();
           await connectToDevice(result.device);
+          // Add a delay to give some time for the connection to establish
+          await Future.delayed(const Duration(seconds: 2));
           // print(result);
           break;
         }
@@ -108,13 +110,11 @@ class BluetoothHandler extends ChangeNotifier {
   }
 
   Future<void> disconnectDevice(BluetoothDevice device) async {
-    if (device != null) {
-      // cancel the stream
-      print('Disconnecting from ${device!.platformName}');
-      disposeStream();
-      await device!.disconnect();
-      device == null;
-    }
+    // cancel the stream
+    print('Disconnecting from ${device!.platformName}');
+    disposeStream();
+    await device.disconnect();
+    this.device = null;
   }
 
   Future<void> sendData(String data) async {
@@ -153,31 +153,13 @@ class BluetoothHandler extends ChangeNotifier {
     }
   }
 
-  Future<void> receiveData() async {
-    if (device == null) {
-      print('Error: No device connected');
-      return;
-    }
-
-    List<BluetoothService> services = await device!.discoverServices();
-    for (BluetoothService service in services) {
-      for (BluetoothCharacteristic characteristic in service.characteristics) {
-        if (characteristic.properties.read &&
-            characteristic.serviceUuid.toString() == thalesSeriviceUUID) {
-          List<int> value = await characteristic.read();
-          String resultString = String.fromCharCodes(value);
-          print(resultString);
-        }
-      }
-    }
-  }
-
   Future<void> subscribe({void Function(String)? callback}) async {
     if (_subscription != null) {
       print("Disposing of old subscription");
       disposeStream();
       notifyListeners();
     }
+
     List<BluetoothService> services = await device!.discoverServices();
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
