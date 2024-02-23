@@ -85,7 +85,7 @@ class _DataPageState extends State<DataPage> {
                         List<GraphData> sensorData = bluetoothHandler
                             .bluetoothDataToGraphData(widget.dataKey);
                         return Text(
-                          'Current: ${bluetoothHandler.bluetoothData.isEmpty ? "None" : sensorData.last.y}\nAverage: ${calculateAverage(sensorData).toStringAsFixed(2)}',
+                          'Current: ${bluetoothHandler.bluetoothData.isEmpty || sensorData.last.y == -1 ? "None" : sensorData.last.y.toStringAsFixed(0)}\nAverage: ${calculateAverage(sensorData).toStringAsFixed(2)}',
                           style: const TextStyle(
                             fontSize: 25,
                             color: Colors.white,
@@ -153,8 +153,16 @@ class _DataPageState extends State<DataPage> {
 
 double calculateAverage(List<GraphData> nums) {
   double sum = 0;
+  int numEntries = 0;
   for (GraphData entry in nums) {
-    sum += entry.y;
+    if (entry.y != -1) {
+      sum += entry.y;
+      numEntries += 1;
+    }
   }
-  return sum / nums.length;
+  if (numEntries > 0) {
+    return sum / numEntries;
+  } else {
+    return 0;
+  }
 }
