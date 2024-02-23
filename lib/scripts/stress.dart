@@ -42,7 +42,7 @@ double calculateRootMeanSquareDifference(List<double> numbers) {
   double previousValue = numbers[0];
 
   for (var number in numbers) {
-    difference = (number - previousValue).abs() / 1000;
+    difference = (number - previousValue).abs();
     sumOfSquaredDifferences += pow(difference, 2);
     previousValue = number;
   }
