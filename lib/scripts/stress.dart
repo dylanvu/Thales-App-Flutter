@@ -4,55 +4,6 @@ import 'package:flutter/material.dart';
 
 // Higher RMSSD and SDNN values are generally associated with better overall health and greater heart rate variability, which is often seen as a sign of a healthy autonomic nervous system.
 
-double calculateStandardDeviation(List<double> numbers) {
-  if (numbers.isEmpty) {
-    throw ArgumentError('The list must not be empty.');
-  }
-
-  // calculate the average of the numbers
-  double sum = 0;
-  for (var number in numbers) {
-    sum += number;
-  }
-  double mean = sum / numbers.length;
-
-  // Calculate the sum of squared differences from the mean
-  double sumOfSquaredDifferences = 0;
-  for (var number in numbers) {
-    double difference = number - mean;
-    sumOfSquaredDifferences += pow(difference, 2);
-  }
-
-  // Calculate the variance
-  double variance = sumOfSquaredDifferences / numbers.length;
-
-  // Calculate the standard deviation (square root of the variance)
-  double standardDeviation = sqrt(variance);
-
-  return standardDeviation;
-}
-
-double calculateRootMeanSquareDifference(List<double> numbers) {
-  if (numbers.isEmpty) {
-    throw ArgumentError('The list must not be empty.');
-  }
-
-  double sumOfSquaredDifferences = 0;
-  double difference = 0;
-  double previousValue = numbers[0];
-
-  for (var number in numbers) {
-    difference = (number - previousValue).abs();
-    sumOfSquaredDifferences += pow(difference, 2);
-    previousValue = number;
-  }
-
-  double rootMeanSquareDifference =
-      sqrt(sumOfSquaredDifferences / numbers.length);
-
-  return rootMeanSquareDifference;
-}
-
 // call this function for stress level calculation based on an array of heart rate data
 enum StressLevel { NULL, LOW, NORMAL, HIGH }
 
@@ -68,8 +19,8 @@ class Stress {
 Stress stressLevelCalculation(List<double> numbers) {
   StressLevel stressLevel = StressLevel.NULL;
 
-  int highStressThreshold = 30;
-  int lowStressThreshold = 90;
+  int highStressThreshold = 20;
+  int lowStressThreshold = 80;
 
   double rmssd = calculateRootMeanSquareDifference(numbers);
 
@@ -104,4 +55,31 @@ List<double> addEntryToList(
     currentNumbers.removeAt(0);
   }
   return currentNumbers;
+}
+
+double calculateRR(double heartRate) {
+  return 60000 / heartRate;
+}
+
+double calculateRootMeanSquareDifference(List<double> numbers) {
+  if (numbers.isEmpty) {
+    throw ArgumentError('The list must not be empty.');
+  }
+
+  double sumOfSquaredDifferences = 0;
+  double difference = 0;
+  double previousValue = calculateRR(numbers[0]);
+  double RR = 0;
+
+  for (var number in numbers) {
+    RR = calculateRR(number);
+    difference = (RR - previousValue).abs();
+    sumOfSquaredDifferences += pow(difference, 2);
+    previousValue = RR;
+  }
+
+  double rootMeanSquareDifference =
+      sqrt(sumOfSquaredDifferences / numbers.length);
+
+  return rootMeanSquareDifference;
 }
