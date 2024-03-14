@@ -12,7 +12,7 @@ class MedicalDisclaimer extends StatelessWidget {
     return (Column(
       children: [
         Text(
-          "This data for informational purposes only.",
+          "This data is for informational purposes only.",
           style: TextStyle(
             fontSize: disclaimerFontSize,
             color: disclaimerColor,
